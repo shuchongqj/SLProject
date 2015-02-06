@@ -65,6 +65,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lib-assimp", "lib-SLExterna
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lib-ovr", "lib-SLExternal\oculus\LibOVR\Projects\Win32\VS2013\LibOVR.vcxproj", "{EA50E705-5113-49E5-B105-2512EDC8DDC6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "app-LeapMotionTest", "app-LeapMotionTest\app-LeapMotionTest.vcxproj", "{2C959818-92F9-44E7-8F02-78A840404D80}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EA50E705-5113-49E5-B105-2512EDC8DDC6} = {EA50E705-5113-49E5-B105-2512EDC8DDC6}
+		{54BE2CB2-A4F9-481D-9C74-FAAE4CD0764D} = {54BE2CB2-A4F9-481D-9C74-FAAE4CD0764D}
+		{CCC645D3-B20F-431C-824A-7895D6E404DF} = {CCC645D3-B20F-431C-824A-7895D6E404DF}
+	EndProjectSection
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "app-VolumeRendering", "app-VolumeRendering\app-VolumeRendering.vcxproj", "{AD06379D-1767-41AA-A877-33857D32D7A0}"
 EndProject
 Global
@@ -207,16 +214,6 @@ Global
 		{EA50E705-5113-49E5-B105-2512EDC8DDC6}.Release|x64.Build.0 = Release|x64
 		{EA50E705-5113-49E5-B105-2512EDC8DDC6}.Release|x86.ActiveCfg = Release|Win32
 		{EA50E705-5113-49E5-B105-2512EDC8DDC6}.Release|x86.Build.0 = Release|Win32
-		{AD06379D-1767-41AA-A877-33857D32D7A0}.Debug|Android.ActiveCfg = Debug|Win32
-		{AD06379D-1767-41AA-A877-33857D32D7A0}.Debug|x64.ActiveCfg = Debug|x64
-		{AD06379D-1767-41AA-A877-33857D32D7A0}.Debug|x64.Build.0 = Debug|x64
-		{AD06379D-1767-41AA-A877-33857D32D7A0}.Debug|x86.ActiveCfg = Debug|Win32
-		{AD06379D-1767-41AA-A877-33857D32D7A0}.Debug|x86.Build.0 = Debug|Win32
-		{AD06379D-1767-41AA-A877-33857D32D7A0}.Release|Android.ActiveCfg = Release|Win32
-		{AD06379D-1767-41AA-A877-33857D32D7A0}.Release|x64.ActiveCfg = Release|x64
-		{AD06379D-1767-41AA-A877-33857D32D7A0}.Release|x64.Build.0 = Release|x64
-		{AD06379D-1767-41AA-A877-33857D32D7A0}.Release|x86.ActiveCfg = Release|Win32
-		{AD06379D-1767-41AA-A877-33857D32D7A0}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,6 +7,7 @@ SUBDIRS += lib-SLExternal/oculus
 SUBDIRS += lib-SLProject
 SUBDIRS += app-Demo-GLFW
 SUBDIRS += app-Demo-Qt
+SUBDIRS += app-LeapMotionTest
 SUBDIRS += app-NodeManipulationDemo
 SUBDIRS += app-Viewer-Qt
 SUBDIRS += app-VolumeRendering
