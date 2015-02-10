@@ -326,7 +326,7 @@ void SLSceneView::onInitialize()
       
         SL_LOG("Time for AABBs : %5.3f sec.\n", 
                 (SLfloat)(clock()-t)/(SLfloat)CLOCKS_PER_SEC);
-
+      
         _stats.clear();
         s->root3D()->statsRec(_stats);
     }
@@ -473,7 +473,7 @@ SLbool SLSceneView::draw3DGL(SLfloat elapsedTimeMS)
     
     // Update camera animation seperately (smooth transition on key movement)
     SLbool camUpdated = _camera->camUpdate(elapsedTimeMS);
-
+   
    
     //////////////////////
     // 2. Clear Buffers //
@@ -517,7 +517,7 @@ SLbool SLSceneView::draw3DGL(SLfloat elapsedTimeMS)
     _camera->setFrustumPlanes(); 
     _blendNodes.clear();
     _opaqueNodes.clear();     
-    s->_root3D->cullRec(this);
+    s->_root3D->cullRec(this);   
    
     _cullTimeMS = s->timeMilliSec() - startMS;
 
@@ -632,8 +632,8 @@ void SLSceneView::draw3DGLLines(SLVNode &nodes)
     _stateGL->blend(false);
     _stateGL->depthMask(true);
 
-    // Set the view transform
-    _stateGL->modelViewMatrix.setMatrix(_stateGL->viewMatrix);
+            // Set the view transform
+            _stateGL->modelViewMatrix.setMatrix(_stateGL->viewMatrix);
 
     // draw the opaque shapes directly w. their wm transform
     for(auto node : nodes)
@@ -652,8 +652,8 @@ void SLSceneView::draw3DGLLines(SLVNode &nodes)
             // Draw AABB for selected shapes
             if (node->drawBit(SL_DB_SELECTED))
                 node->aabb()->drawWS(SLCol3f(1,1,0));
+            }
         }
-    }
    
     GET_GL_ERROR;        // Check if any OGL errors occurred
 }
@@ -663,7 +663,7 @@ SLSceneView::draw3DGLLinesOverlay draws the nodes axis and skeleton joints
 as overlayed
 */
 void SLSceneView::draw3DGLLinesOverlay(SLVNode &nodes)
-{
+{  
 
     // draw the opaque shapes directly w. their wm transform
     for(auto node : nodes)
@@ -673,16 +673,16 @@ void SLSceneView::draw3DGLLinesOverlay(SLVNode &nodes)
             if (drawBit(SL_DB_AXIS) || node->drawBit(SL_DB_AXIS) ||
                 drawBit(SL_DB_SKELETON) || node->drawBit(SL_DB_SKELETON))
             {
-                // Set the view transform
-                _stateGL->modelViewMatrix.setMatrix(_stateGL->viewMatrix);
+        // Set the view transform
+        _stateGL->modelViewMatrix.setMatrix(_stateGL->viewMatrix);
                 _stateGL->blend(false);      // Turn off blending for overlay
                 _stateGL->depthMask(true);   // Freeze depth buffer for blending
                 _stateGL->depthTest(false);  // Turn of depth test for overlay
-
+      
                 // Draw axis
                 if (drawBit(SL_DB_AXIS) || node->drawBit(SL_DB_AXIS))
                     node->aabb()->drawAxisWS();
-
+      
                 // Draw skeleton
                 if (drawBit(SL_DB_SKELETON) || node->drawBit(SL_DB_SKELETON))
                 {
@@ -701,12 +701,12 @@ void SLSceneView::draw3DGLLinesOverlay(SLVNode &nodes)
                             {   parentWM = node->parent()->updateAndGetWM();
                                 parentWM *= joint->parent()->updateAndGetWM();
                                 joint->aabb()->updateBoneWS(parentWM, false, wm);
-                            } 
+    }
                             else 
                                 joint->aabb()->updateBoneWS(parentWM, true, wm);
-
+   
                             joint->aabb()->drawBoneWS();
-                        }
+}
                     }
                 }
             }
@@ -769,57 +769,57 @@ void SLSceneView::draw2DGL()
         
         // temp visualization of the texture above
         /*
-        glClear(GL_COLOR_BUFFER_BIT);
-        static SLGLGenericProgram tmpShader("StereoOculus.vert", "StereoOculus.frag");
+            glClear(GL_COLOR_BUFFER_BIT);
+            static SLGLGenericProgram tmpShader("StereoOculus.vert", "StereoOculus.frag");
 
-        static GLuint screenQuad = 0;
+            static GLuint screenQuad = 0;
         if (!screenQuad) 
         {   GLfloat quadVerts[] = {-1, -1,
-                                    1, -1,
-                                   -1,  1,
-                                    1,  1};
-            glGenBuffers(1, &screenQuad);
-            glBindBuffer(GL_ARRAY_BUFFER, screenQuad);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(quadVerts), quadVerts, GL_STATIC_DRAW);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-        }
-                                 
-        glDisable(GL_DEPTH_TEST);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, _oculusFB.texID());
+                                        1, -1,
+                                       -1,  1,
+                                        1,  1};
+                glGenBuffers(1, &screenQuad);
+                glBindBuffer(GL_ARRAY_BUFFER, screenQuad);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(quadVerts), quadVerts, GL_STATIC_DRAW);
+                glBindBuffer(GL_ARRAY_BUFFER, 0);
+            }
+
+            glDisable(GL_DEPTH_TEST);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, _oculusFB.texID());
 
         tmpShader.beginUse(); //bind the rift shader
 
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, screenQuad);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glDisableVertexAttribArray(0);
-        glEnable(GL_DEPTH_TEST);
+            glEnableVertexAttribArray(0);
+            glBindBuffer(GL_ARRAY_BUFFER, screenQuad);
+            glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+            glDisableVertexAttribArray(0);
+            glEnable(GL_DEPTH_TEST);
         */
-    }
-    
+        }
+
     // below is the normal menu to test interaction with the default mouse
     /*
-    _stateGL->projectionMatrix.ortho(-w2, w2,-h2, h2, 1.0f, -1.0f);
-    _stateGL->viewport(0, 0, _scrW, _scrH);
+        _stateGL->projectionMatrix.ortho(-w2, w2,-h2, h2, 1.0f, -1.0f);
+        _stateGL->viewport(0, 0, _scrW, _scrH);
 
    
-    _stateGL->depthMask(false);         // Freeze depth buffer for blending
-    _stateGL->depthTest(false);         // Disable depth testing
-    _stateGL->blend(true);              // Enable blending
-    _stateGL->polygonLine(false);       // Only filled polygons
+        _stateGL->depthMask(false);         // Freeze depth buffer for blending
+        _stateGL->depthTest(false);         // Disable depth testing
+        _stateGL->blend(true);              // Enable blending
+        _stateGL->polygonLine(false);       // Only filled polygons
 
-    // Draw menu buttons tree
-    if (!_showLoading && _showMenu && s->_menu2D)
-    {  _stateGL->modelViewMatrix.identity();
-        _stateGL->modelViewMatrix.translate(-w2, -h2, 0);
-        s->_menu2D->drawRec(this);
-    }   
-    _stateGL->blend(false);       // turn off blending
-    _stateGL->depthMask(true);    // enable depth buffer writing
-    _stateGL->depthTest(true);    // enable depth testing
-    GET_GL_ERROR;                 // check if any OGL errors occured
+        // Draw menu buttons tree
+        if (!_showLoading && _showMenu && s->_menu2D)
+        {  _stateGL->modelViewMatrix.identity();
+            _stateGL->modelViewMatrix.translate(-w2, -h2, 0);
+            s->_menu2D->drawRec(this);
+        }   
+        _stateGL->blend(false);       // turn off blending
+        _stateGL->depthMask(true);    // enable depth buffer writing
+        _stateGL->depthTest(true);    // enable depth testing
+        GET_GL_ERROR;                 // check if any OGL errors occured
     */
     
 
@@ -962,15 +962,15 @@ void SLSceneView::draw2DGLAll()
     // Draw virtual mouse cursor if we're in hmd stereo mode
     if (_camera->projection() == stereoSideBySideD)
     {
-        SLfloat hCur = (SLfloat)s->texCursor()->height();
-        _stateGL->multiSample(true);
-        _stateGL->pushModelViewMatrix();  
-        _stateGL->modelViewMatrix.translate(-w2, -h2, 0);
-        _stateGL->modelViewMatrix.translate((SLfloat)_posCursor.x, 
-                                            (_scrH-_posCursor.y-hCur), 0);
-        s->texCursor()->drawSprite();
-        _stateGL->popModelViewMatrix();
-    }
+            SLfloat hCur = (SLfloat)s->texCursor()->height();
+            _stateGL->multiSample(true);
+            _stateGL->pushModelViewMatrix();  
+            _stateGL->modelViewMatrix.translate(-w2, -h2, 0);
+            _stateGL->modelViewMatrix.translate((SLfloat)_posCursor.x, 
+                                                (_scrH-_posCursor.y-hCur), 0);
+            s->texCursor()->drawSprite();
+            _stateGL->popModelViewMatrix();
+        }
 
     _stateGL->popModelViewMatrix();        
 
@@ -1254,6 +1254,14 @@ SLbool SLSceneView::onKeyPress(SLKey key, SLKey mod)
 {  
     SLScene* s = SLScene::current;
     
+    // temp test:
+    if (key == '5') {
+        _camera->eyeSeparation(_camera->eyeSeparation() + 0.5f);
+    }
+    else if (key == '6') {
+        _camera->eyeSeparation(_camera->eyeSeparation() - 0.5f);
+    }
+
     if (key == '1') { _runAnim = !_runAnim; return true; }
     if (key == '2') { _animTime += 0.1f; return true; }
     if (key == '3') { _runBackwards = !_runBackwards; return true; }
@@ -1368,77 +1376,77 @@ SLbool SLSceneView::onCommand(SLCmd cmd)
 
     switch (cmd)
     {
-    case cmdQuit:
-        slShouldClose(true);
+        case cmdQuit:
+            slShouldClose(true);
     case cmdMenu:
         return false;
-    case cmdAboutToggle:
-        if (s->_menu2D)
+        case cmdAboutToggle:
+            if (s->_menu2D)
         {
             if (s->_menu2D == s->_menuGL)
-                s->_menu2D = s->_btnAbout;
+                     s->_menu2D = s->_btnAbout;
+                else s->_menu2D = s->_menuGL;
+                return true;
+        }
+        else return false;
+        case cmdHelpToggle:
+            if (s->_menu2D)
+        {
+            if (s->_menu2D == s->_menuGL)
+                    s->_menu2D = s->_btnHelp;
+                else s->_menu2D = s->_menuGL;
+                return true;
+        }
+        else return false;
+        case cmdCreditsToggle:
+            if (s->_menu2D)
+        {
+            if (s->_menu2D == s->_menuGL)
+                    s->_menu2D = s->_btnCredits;
             else s->_menu2D = s->_menuGL;
             return true;
         }
         else return false;
-    case cmdHelpToggle:
-        if (s->_menu2D)
-        {
-            if (s->_menu2D == s->_menuGL)
-                s->_menu2D = s->_btnHelp;
-            else s->_menu2D = s->_menuGL;
-            return true;
-        }
-        else return false;
-    case cmdCreditsToggle:
-        if (s->_menu2D)
-        {
-            if (s->_menu2D == s->_menuGL)
-                s->_menu2D = s->_btnCredits;
-            else s->_menu2D = s->_menuGL;
-            return true;
-        }
-        else return false;
 
-    case cmdSceneSmallTest:
-    case cmdSceneFigure:
-    case cmdSceneLargeModel:
-    case cmdSceneMeshLoad:
-    case cmdSceneRevolver:
-    case cmdSceneTextureFilter:
-    case cmdSceneFrustumCull1:
-    case cmdSceneFrustumCull2:
-    case cmdSceneTextureBlend:
+        case cmdSceneSmallTest:
+        case cmdSceneFigure:
+        case cmdSceneLargeModel:
+        case cmdSceneMeshLoad:
+        case cmdSceneRevolver:
+        case cmdSceneTextureFilter:
+        case cmdSceneFrustumCull1:
+        case cmdSceneFrustumCull2:
+        case cmdSceneTextureBlend:
 
-    case cmdScenePerVertexBlinn:
-    case cmdScenePerPixelBlinn:
-    case cmdScenePerVertexWave:
-    case cmdSceneWater:
-    case cmdSceneBumpNormal:
-    case cmdSceneBumpParallax:
-    case cmdSceneEarth:
+        case cmdScenePerVertexBlinn:
+        case cmdScenePerPixelBlinn:
+        case cmdScenePerVertexWave:
+        case cmdSceneWater:
+        case cmdSceneBumpNormal:  
+        case cmdSceneBumpParallax:
+        case cmdSceneEarth:
 
-    case cmdSceneMassAnimation:
-    case cmdSceneNodeAnimation:
-    case cmdSceneSkeletalAnimation:
-    case cmdSceneAstroboyArmyCPU:
-    case cmdSceneAstroboyArmyGPU:
+        case cmdSceneMassAnimation:
+        case cmdSceneNodeAnimation:
+        case cmdSceneSkeletalAnimation:
+        case cmdSceneAstroboyArmyCPU:
+        case cmdSceneAstroboyArmyGPU:
 
-    case cmdSceneRTSpheres:
-    case cmdSceneRTMuttenzerBox:
-    case cmdSceneRTSoftShadows:
-    case cmdSceneRTDoF:
+        case cmdSceneRTSpheres:
+        case cmdSceneRTMuttenzerBox:
+        case cmdSceneRTSoftShadows:
+        case cmdSceneRTDoF:
     case cmdSceneRTTest:
-    case cmdSceneRTLens:        s->onLoad(this, (SLCmd)cmd); return false;
+        case cmdSceneRTLens:        s->onLoad(this, (SLCmd)cmd); return false;
 
-    case cmdUseSceneViewCamera: switchToSceneViewCamera(); return true;
-    case cmdStatsToggle:        _showStats = !_showStats; return true;
-    case cmdSceneInfoToggle:    _showInfo = !_showInfo; return true;
-    case cmdWaitEventsToggle:   _waitEvents = !_waitEvents; return true;
-    case cmdMultiSampleToggle:
-        _doMultiSampling = !_doMultiSampling;
+        case cmdUseSceneViewCamera: switchToSceneViewCamera(); return true;
+        case cmdStatsToggle:        _showStats = !_showStats; return true;
+        case cmdSceneInfoToggle:    _showInfo = !_showInfo; return true;
+        case cmdWaitEventsToggle:   _waitEvents = !_waitEvents; return true;
+        case cmdMultiSampleToggle:
+            _doMultiSampling = !_doMultiSampling;
         _raytracer.aaSamples(_doMultiSampling ? 3 : 1);
-        return true;
+            return true;
     case cmdFrustCullToggle:    _doFrustumCulling = !_doFrustumCulling; return true;
     case cmdDepthTestToggle:    _doDepthTest = !_doDepthTest; return true;
 
@@ -1451,97 +1459,97 @@ SLbool SLSceneView::onCommand(SLCmd cmd)
     case cmdFaceCullToggle:     _drawBits.toggle(SL_DB_CULLOFF);  return true;
     case cmdTextureToggle:      _drawBits.toggle(SL_DB_TEXOFF);   return true;
 
-    case cmdAnimationToggle: s->_stopAnimations = !s->_stopAnimations; return true;
+        case cmdAnimationToggle: s->_stopAnimations = !s->_stopAnimations; return true;
+      
+        case cmdRenderOpenGL:
+            _renderType = renderGL;
+            s->menu2D(s->_menuGL);
+            return true;
+        case cmdRTContinuously:   
+            _raytracer.continuous(!_raytracer.continuous());
+            return true;
+        case cmdRTDistributed:   
+            _raytracer.distributed(!_raytracer.distributed());
+            startRaytracing(5);
+            return true;
+        case cmdRT1: startRaytracing(1); return true;
+        case cmdRT2: startRaytracing(2); return true;
+        case cmdRT3: startRaytracing(3); return true;
+        case cmdRT4: startRaytracing(4); return true;
+        case cmdRT5: startRaytracing(5); return true;
+        case cmdRT6: startRaytracing(6); return true;
+        case cmdRT7: startRaytracing(7); return true;
+        case cmdRT8: startRaytracing(8); return true;
+        case cmdRT9: startRaytracing(9); return true;
+        case cmdRT0: startRaytracing(0); return true;
+        case cmdRTSaveImage: _raytracer.saveImage(); return true;
 
-    case cmdRenderOpenGL:
-        _renderType = renderGL;
-        s->menu2D(s->_menuGL);
-        return true;
-    case cmdRTContinuously:
-        _raytracer.continuous(!_raytracer.continuous());
-        return true;
-    case cmdRTDistributed:
-        _raytracer.distributed(!_raytracer.distributed());
-        startRaytracing(5);
-        return true;
-    case cmdRT1: startRaytracing(1); return true;
-    case cmdRT2: startRaytracing(2); return true;
-    case cmdRT3: startRaytracing(3); return true;
-    case cmdRT4: startRaytracing(4); return true;
-    case cmdRT5: startRaytracing(5); return true;
-    case cmdRT6: startRaytracing(6); return true;
-    case cmdRT7: startRaytracing(7); return true;
-    case cmdRT8: startRaytracing(8); return true;
-    case cmdRT9: startRaytracing(9); return true;
-    case cmdRT0: startRaytracing(0); return true;
-    case cmdRTSaveImage: _raytracer.saveImage(); return true;
+        case cmdPT1: startPathtracing(5, 1); return true;
+        case cmdPT10: startPathtracing(5, 10); return true;
+        case cmdPT50: startPathtracing(5, 50); return true;
+        case cmdPT100: startPathtracing(5, 100); return true;
+        case cmdPT500: startPathtracing(5, 500); return true;
+        case cmdPT1000: startPathtracing(5, 1000); return true;
+        case cmdPT5000: startPathtracing(5, 5000); return true;
+        case cmdPT10000: startPathtracing(5, 100000); return true;
+        case cmdPTSaveImage: _pathtracer.saveImage(); return true;
 
-    case cmdPT1: startPathtracing(5, 1); return true;
-    case cmdPT10: startPathtracing(5, 10); return true;
-    case cmdPT50: startPathtracing(5, 50); return true;
-    case cmdPT100: startPathtracing(5, 100); return true;
-    case cmdPT500: startPathtracing(5, 500); return true;
-    case cmdPT1000: startPathtracing(5, 1000); return true;
-    case cmdPT5000: startPathtracing(5, 5000); return true;
-    case cmdPT10000: startPathtracing(5, 100000); return true;
-    case cmdPTSaveImage: _pathtracer.saveImage(); return true;
-
-    default: break;
-    }
+        default: break;
+   }
 
     if (_camera)
-    {
+    {           
         SLProjection prevProjection = _camera->projection();
         SLbool perspectiveChanged = prevProjection != (SLProjection)(cmd - cmdProjPersp);
 
         switch (cmd)
         {
         case cmdProjPersp:
-            _camera->projection(monoPerspective);
-            if (_renderType == renderRT && !_raytracer.continuous() &&
+                _camera->projection(monoPerspective);
+                if (_renderType == renderRT && !_raytracer.continuous() && 
                 _raytracer.state() == rtFinished)
-                _raytracer.state(rtReady);
-            break;
-        case cmdProjOrtho:
-            _camera->projection(monoOrthographic);
-            if (_renderType == renderRT && !_raytracer.continuous() &&
+                    _raytracer.state(rtReady);
+                break;
+            case cmdProjOrtho:
+                _camera->projection(monoOrthographic);
+                if (_renderType == renderRT && !_raytracer.continuous() && 
                 _raytracer.state() == rtFinished)
-                _raytracer.state(rtReady);
-            break;
-        case cmdProjSideBySide:    _camera->projection(stereoSideBySide); break;
-        case cmdProjSideBySideP:   _camera->projection(stereoSideBySideP); break;
-        case cmdProjSideBySideD:   _camera->projection(stereoSideBySideD); break;
-        case cmdProjLineByLine:    _camera->projection(stereoLineByLine); break;
-        case cmdProjColumnByColumn:_camera->projection(stereoColumnByColumn); break;
-        case cmdProjPixelByPixel:  _camera->projection(stereoPixelByPixel); break;
-        case cmdProjColorRC:       _camera->projection(stereoColorRC); break;
-        case cmdProjColorRG:       _camera->projection(stereoColorRG); break;
-        case cmdProjColorRB:       _camera->projection(stereoColorRB); break;
-        case cmdProjColorYB:       _camera->projection(stereoColorYB); break;
-
+                    _raytracer.state(rtReady);
+                break;
+            case cmdProjSideBySide:    _camera->projection(stereoSideBySide); break;
+            case cmdProjSideBySideP:   _camera->projection(stereoSideBySideP); break;
+            case cmdProjSideBySideD:   _camera->projection(stereoSideBySideD); break;
+            case cmdProjLineByLine:    _camera->projection(stereoLineByLine); break;
+            case cmdProjColumnByColumn:_camera->projection(stereoColumnByColumn); break;
+            case cmdProjPixelByPixel:  _camera->projection(stereoPixelByPixel); break;
+            case cmdProjColorRC:       _camera->projection(stereoColorRC); break;
+            case cmdProjColorRG:       _camera->projection(stereoColorRG); break;
+            case cmdProjColorRB:       _camera->projection(stereoColorRB); break;
+            case cmdProjColorYB:       _camera->projection(stereoColorYB); break;
+      
         case cmdCamSpeedLimitInc:  _camera->maxSpeed(_camera->maxSpeed()*1.2f); return true;
         case cmdCamSpeedLimitDec:  _camera->maxSpeed(_camera->maxSpeed()*0.8f); return true;
         case cmdCamEyeSepInc:      _camera->onMouseWheel(1, KeyCtrl); return true;
-        case cmdCamEyeSepDec:      _camera->onMouseWheel(-1, KeyCtrl); return true;
+            case cmdCamEyeSepDec:      _camera->onMouseWheel(-1, KeyCtrl); return true;
         case cmdCamFocalDistInc:   _camera->onMouseWheel(1, KeyShift); return true;
-        case cmdCamFocalDistDec:   _camera->onMouseWheel(-1, KeyShift); return true;
+            case cmdCamFocalDistDec:   _camera->onMouseWheel(-1, KeyShift); return true;
         case cmdCamFOVInc:         _camera->onMouseWheel(1, KeyAlt); return true;
-        case cmdCamFOVDec:         _camera->onMouseWheel(-1, KeyAlt); return true;
-        case cmdCamAnimTurnYUp:    _camera->camAnim(turntableYUp); return true;
-        case cmdCamAnimTurnZUp:    _camera->camAnim(turntableZUp); return true;
-        case cmdCamAnimWalkYUp:    _camera->camAnim(walkingYUp); return true;
-        case cmdCamAnimWalkZUp:    _camera->camAnim(walkingZUp); return true;
-        case cmdCamDeviceRotOn:    _camera->useDeviceRot(true); return true;
-        case cmdCamDeviceRotOff:   _camera->useDeviceRot(false); return true;
-        case cmdCamDeviceRotToggle:_camera->useDeviceRot(!_camera->useDeviceRot()); return true;
-        case cmdCamReset:          _camera->resetToInitialState(); return true;
-        default: break;
+            case cmdCamFOVDec:         _camera->onMouseWheel(-1, KeyAlt); return true;
+            case cmdCamAnimTurnYUp:    _camera->camAnim(turntableYUp); return true;
+            case cmdCamAnimTurnZUp:    _camera->camAnim(turntableZUp); return true;
+            case cmdCamAnimWalkYUp:    _camera->camAnim(walkingYUp); return true;
+            case cmdCamAnimWalkZUp:    _camera->camAnim(walkingZUp); return true;
+            case cmdCamDeviceRotOn:    _camera->useDeviceRot(true); return true;
+            case cmdCamDeviceRotOff:   _camera->useDeviceRot(false); return true;
+            case cmdCamDeviceRotToggle:_camera->useDeviceRot(!_camera->useDeviceRot()); return true;
+            case cmdCamReset:          _camera->resetToInitialState(); return true;
+            default: break;
         }
-
+                
         // special case code ???
         if (perspectiveChanged)
         {
-            if (cmd == cmdProjSideBySideD)
+            if (cmd == cmdProjSideBySideD) 
             {
                 _vrMode = true;
                 dpi(dpi() * 2);
@@ -1640,7 +1648,7 @@ void SLSceneView::build2DMenus()
     if(SLFileSystem::fileExists(large1) || 
        SLFileSystem::fileExists(large2) || 
        SLFileSystem::fileExists(large3))
-        mn3->addChild(new SLButton(this, "Large Model", f, cmdSceneLargeModel, true, curS==cmdSceneLargeModel, mn2));
+    mn3->addChild(new SLButton(this, "Large Model", f, cmdSceneLargeModel, true, curS==cmdSceneLargeModel, mn2));
     mn3->addChild(new SLButton(this, "Figure", f, cmdSceneFigure, true, curS==cmdSceneFigure, mn2));
     mn3->addChild(new SLButton(this, "Mesh Loader", f, cmdSceneMeshLoad, true, curS==cmdSceneMeshLoad, mn2));
     mn3->addChild(new SLButton(this, "Texture Blending", f, cmdSceneTextureBlend, true, curS==cmdSceneTextureBlend, mn2));
@@ -1728,7 +1736,7 @@ void SLSceneView::build2DMenus()
 
     mn3 = new SLButton(this, "Use Device Rotation", f, cmdCamDeviceRotToggle, true, useDeviceRot, 0, false);
     mn2->addChild(mn3);
-
+   
     mn2 = new SLButton(this, "Render States >", f);
     mn1->addChild(mn2);
     mn2->addChild(new SLButton(this, "Slowdown on Idle", f, cmdWaitEventsToggle, true, _waitEvents, 0, false));

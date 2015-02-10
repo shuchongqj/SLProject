@@ -186,7 +186,7 @@ SLbool SLCamera::camUpdate(SLfloat elapsedTimeMS)
       
         SL_LOG("cs: %3.1f, %3.1f, %3.1f\n", _curSpeed.x, _curSpeed.y, _curSpeed.z);
         SLfloat temp = _curSpeed.length();
-
+      
         _curSpeed = updateAndGetWM().mat3() * _curSpeed;
         _curSpeed.y = 0;
         _curSpeed.normalize();
@@ -561,15 +561,15 @@ void SLCamera::setView(SLSceneView* sv, const SLEye eye)
                 if (s->oculus()->isConnected())
                 {
                     rotation = s->oculus()->orientation(eye);
-                    trackingPos.translate(-s->oculus()->position(eye));
+                    trackingPos.translate(-s->oculus()->position(eye)*_eyeSeparation);
                 }
                 else rotation = sv->deviceRotation();
 
                 SLfloat rotX, rotY, rotZ;
                 rotation.toMat4().toEulerAnglesZYX(rotZ, rotY, rotX);
                 //SL_LOG("rotx : %3.1f, roty: %3.1f, rotz: %3.1f\n", rotX*SL_RAD2DEG, rotY*SL_RAD2DEG, rotZ*SL_RAD2DEG);
-                SLVec3f viewAdjust = s->oculus()->viewAdjust(eye) * _unitScaling;
-                SLMat4f vmEye(SLMat4f(viewAdjust.x, viewAdjust.y, viewAdjust.z) * rotation.inverted().toMat4() * trackingPos * vm);
+                SLVec3f viewAdjust = s->oculus()->viewAdjust(eye);
+                SLMat4f vmEye(SLMat4f(_eyeSeparation*viewAdjust.x, viewAdjust.y, viewAdjust.z) * rotation.inverted().toMat4() * trackingPos * vm);
                 _stateGL->modelViewMatrix = vmEye;
                 _stateGL->viewMatrix = vmEye;
             } 
