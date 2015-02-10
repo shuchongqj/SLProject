@@ -156,8 +156,9 @@ class SLCamera: public SLNode
             SLfloat         _lensDiameter;          //!< Lens diameter
             SLSamples2D     _lensSamples;           //!< samplepoints for lens sampling (dof)
 
-            // Stereo rendering
+            // Stereo rendering & VR
             SLfloat         _eyeSeparation;         //!< eye separation for stereo mode
+            SLfloat         _unitScaling            //!< default unit's are meters, change unit scaling to convert to other mesurements
 };
 //-----------------------------------------------------------------------------
 #endif

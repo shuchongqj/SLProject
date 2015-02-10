@@ -28,7 +28,10 @@ class SampleHandListener : public SLLeapHandListener
 public:
     void init()
     {
-        SLScene* s = SLScene::current;
+        SLNode* parent = new SLNode;
+        //parent->scale(0.01f);
+        SLScene::current->root3D()->addChild(parent);
+
         
         SLMesh* palmMesh = new SLBox(-0.15f, -0.05f, -0.15f, 0.15f, 0.05f, 0.15f);
         SLMesh* jointMesh = new SLSphere(0.05f);
@@ -69,8 +72,8 @@ public:
                 leftJoints[i][j] = new SLNode(jointMesh);
                 rightJoints[i][j] = new SLNode(jointMesh);
 
-                s->root3D()->addChild(leftJoints[i][j]);
-                s->root3D()->addChild(rightJoints[i][j]);
+                parent->addChild(leftJoints[i][j]);
+                parent->addChild(rightJoints[i][j]);
             }
             // bones
             for (SLint j = 0; j < 4; ++j) {
@@ -80,7 +83,7 @@ public:
                 
                 leftBones[i][j] = new SLNode;
                 leftBones[i][j]->addChild(meshCont);
-                s->root3D()->addChild(leftBones[i][j]);
+                parent->addChild(leftBones[i][j]);
 
                 
                 meshCont = new SLNode(boneMesh);
@@ -89,21 +92,21 @@ public:
                 
                 rightBones[i][j] = new SLNode;
                 rightBones[i][j]->addChild(meshCont);
-                s->root3D()->addChild(rightBones[i][j]);
+                parent->addChild(rightBones[i][j]);
             }
         }
 
 
         
-        s->root3D()->addChild(leftHand);
-        s->root3D()->addChild(rightHand);
+        parent->addChild(leftHand);
+        parent->addChild(rightHand);
         
-        s->root3D()->addChild(leftArm);
-        s->root3D()->addChild(rightArm);
-        s->root3D()->addChild(leftElbow);
-        s->root3D()->addChild(rightElbow);
-        s->root3D()->addChild(leftWrist);
-        s->root3D()->addChild(rightWrist);
+        parent->addChild(leftArm);
+        parent->addChild(rightArm);
+        parent->addChild(leftElbow);
+        parent->addChild(rightElbow);
+        parent->addChild(leftWrist);
+        parent->addChild(rightWrist);
     }
 
 protected:

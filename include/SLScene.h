@@ -108,7 +108,7 @@ class SLScene: public SLObject
             SLVLight        _lights;            //!< Vector of all lights
             SLVEventHandler _eventHandlers;     //!< Vector of all event handler
             SLAnimManager   _animManager;       //!< Animation manager instance
-            
+                        
             SLNode*         _root3D;            //!< Root node for 3D scene
             SLNode*         _selectedNode;      //!< Pointer to the selected node
             SLMesh*         _selectedMesh;      //!< Pointer to the selected mesh

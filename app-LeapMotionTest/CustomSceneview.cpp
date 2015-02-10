@@ -248,20 +248,20 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd cmd)
     
     
     SLAssimpImporter importer("Importer.log");
-    SLNode* meshDAE = importer.load("DAE/AstroBoy/AstroBoy.dae");
+    //SLNode* meshDAE = importer.load("DAE/AstroBoy/AstroBoy.dae");
+    //scene->addChild(meshDAE);
     importer.logFileVerbosity(LV_Detailed);
     SLNode* meshDAE2 = importer.load("DAE/Hands/rigged_hands.dae");
+    scene->addChild(meshDAE2);
+    //meshDAE2->scale(12.5);
+    //meshDAE2->translate(0, 0, 5);
 
     
     for (SLint i = 0; i < importer.meshes().size(); ++i) {
         //importer.meshes()[i]->skinningMethod(SM_HardwareSkinning);
     }
     
-    scene->addChild(meshDAE);
 
-    meshDAE2->scale(12.5);
-    meshDAE2->translate(0, 0, 5);
-    scene->addChild(meshDAE2);
 
     SLCamera* cam1 = new SLCamera;
     cam1->position(-4, 3, 3);
@@ -297,7 +297,7 @@ void CustomSceneView::postSceneLoad()
 
     // set the skeleton that this rigged listener should control
     // @todo allow for an easier way to search and find the desired skeleton via name strings
-    _riggedListener.setSkeleton(SLScene::current->animManager().skeletons()[1]);
+    _riggedListener.setSkeleton(SLScene::current->animManager().skeletons()[0]);
     
     //_riggedListener.setScaleCorrection(SLVec3f(10, 10, 10));
 

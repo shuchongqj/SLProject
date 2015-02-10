@@ -1196,6 +1196,14 @@ SLbool SLSceneView::onKeyPress(const SLKey key, const SLKey mod)
 {  
     SLScene* s = SLScene::current;
     
+    // temp test:
+    if (key == '5') {
+        _camera->eyeSeparation(_camera->eyeSeparation() + 0.5f);
+    }
+    else if (key == '6') {
+        _camera->eyeSeparation(_camera->eyeSeparation() - 0.5f);
+    }
+
     if (key == '1') { _runAnim = !_runAnim; return true; }
     if (key == '2') { _animTime += 0.1f; return true; }
     if (key == '3') { _runBackwards = !_runBackwards; return true; }
