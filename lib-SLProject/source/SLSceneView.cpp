@@ -1527,8 +1527,8 @@ SLbool SLSceneView::onCommand(SLCmd cmd)
             case cmdProjColorRB:       _camera->projection(stereoColorRB); break;
             case cmdProjColorYB:       _camera->projection(stereoColorYB); break;
       
-        case cmdCamSpeedLimitInc:  _camera->maxSpeed(_camera->maxSpeed()*1.2f); return true;
-        case cmdCamSpeedLimitDec:  _camera->maxSpeed(_camera->maxSpeed()*0.8f); return true;
+            case cmdCamSpeedLimitInc:  _camera->maxSpeed(_camera->maxSpeed()*1.2f); return true;
+            case cmdCamSpeedLimitDec:  _camera->maxSpeed(_camera->maxSpeed()*0.8f); return true;
         case cmdCamEyeSepInc:      _camera->onMouseWheel(1, KeyCtrl); return true;
             case cmdCamEyeSepDec:      _camera->onMouseWheel(-1, KeyCtrl); return true;
         case cmdCamFocalDistInc:   _camera->onMouseWheel(1, KeyShift); return true;

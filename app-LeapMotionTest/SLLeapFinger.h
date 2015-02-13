@@ -14,6 +14,9 @@
 #include <stdafx.h>
 #include <Leap.h>
 
+class SLLeapHand;
+
+
 
 class SLLeapFinger
 {

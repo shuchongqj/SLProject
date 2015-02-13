@@ -755,6 +755,14 @@ void SLNode::rotation(const SLQuat4f& rot,
         // get the inverse parent rotation to remove it from our current rotation
         // we want the input quaternion to absolutely set our new rotation relative 
         // to the world axes
+        /// @todo   this implementation works well most of the time, however. If the parent
+        ///         node also has scaling then that scaling will be removed forever (the om
+        ///         will forever keep the inverse of the parent's wm and thus completely removing 
+        ///         it. We need to only remove the paren'ts rotation however and set the inverse
+        ///         rotation to our current om.
+        ///         Also, we need to retain the local scaling of THIS node too. We'll probably need
+        ///         to decompose the matrices... This is a good example why working with rot trans scale
+        ///         rather than matrices is easier.
         SLMat4f parentRotInv = _parent->updateAndGetWMI();
         parentRotInv.translation(0, 0, 0);
         

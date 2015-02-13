@@ -10,8 +10,10 @@
 
 #include  <stdafx.h>
 #include "SLLeapHand.h"
+#include <SLLeapDefines.h>
 
 SLLeapHand::SLLeapHand()
+:_scaling(0.001f) // default unit scaling to receive position in meters
 {
     for (SLint i = 0; i < 5; ++i)
         _fingers.push_back(SLLeapFinger((Leap::Finger::Type)i));
@@ -20,7 +22,7 @@ SLLeapHand::SLLeapHand()
 SLVec3f SLLeapHand::palmPosition() const
 {
     Leap::Vector pos = _hand.palmPosition();
-    return SLVec3f(pos.x, pos.y, pos.z) *0.01f; // @todo add the unit scaling as a constant define
+    return SLVec3f(pos.x, pos.y, pos.z) * LM_TO_SL_UNITS;
 }
 
 
@@ -49,18 +51,18 @@ SLQuat4f SLLeapHand::palmRotation() const
 SLVec3f SLLeapHand::wristPosition() const
 {
     Leap::Vector pos = _hand.wristPosition();
-    return SLVec3f(pos.x, pos.y, pos.z) *0.01f; // @todo add the unit scaling as a constant define
+    return SLVec3f(pos.x, pos.y, pos.z) * LM_TO_SL_UNITS;
 }
 SLVec3f SLLeapHand::elbowPosition() const
 {
     Leap::Vector pos = _hand.arm().elbowPosition();
-    return SLVec3f(pos.x, pos.y, pos.z) *0.01f; // @todo add the unit scaling as a constant define
+    return SLVec3f(pos.x, pos.y, pos.z) * LM_TO_SL_UNITS;
 }
     
 SLVec3f SLLeapHand::armCenter() const
 {
     Leap::Vector pos = _hand.arm().center();
-    return SLVec3f(pos.x, pos.y, pos.z) *0.01f; // @todo add the unit scaling as a constant define
+    return SLVec3f(pos.x, pos.y, pos.z) * LM_TO_SL_UNITS;
 }
 SLVec3f SLLeapHand::armDirection() const
 {
