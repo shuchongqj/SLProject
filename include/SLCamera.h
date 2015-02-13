@@ -78,6 +78,8 @@ class SLCamera: public SLNode
             void            setFrustumPlanes();
 
             // Setters
+            void            unitScaling     (SLfloat s)          {_unitScaling = s; }
+
             void            projection      (SLProjection p)     {_projection = p;
                                                                   currentProjection = p;}
             void            fov             (const SLfloat fov)  {_fov = fov;
@@ -87,7 +89,7 @@ class SLCamera: public SLNode
             void            clipNear        (const SLfloat cNear){_clipNear = cNear;}
             void            clipFar         (const SLfloat cFar) {_clipFar = cFar;}
             void            numRendered     (const SLuint numR)  {_numRendered = numR;}
-            void            speedLimit      (const SLfloat sl)   {_speedLimit = sl;}
+            void            maxSpeed        (const SLfloat ms)   {_maxSpeed = ms;}
             void            focalDist       (const SLfloat f)    {_focalDist = f;}
             void            lensDiameter    (const SLfloat d)    {_lensDiameter = d;}
             void            lensSamples     (SLint x, SLint y)   {_lensSamples.samples(x, y);}
@@ -96,26 +98,28 @@ class SLCamera: public SLNode
                
             // Getters
             const SLMat4f&  updateAndGetVM  () const {return updateAndGetWMI();}
-            SLProjection    projection      () {return _projection;}
-            SLstring        projectionStr   () {return projectionToStr(_projection);}
+            SLProjection    projection      () const {return _projection;}
+            SLstring        projectionStr   () const {return projectionToStr(_projection);}
                  
-            SLfloat         fov             () {return _fov;}
-            SLfloat         aspect          () {return _aspect;}
-            SLfloat         clipNear        () {return _clipNear;}
-            SLfloat         clipFar         () {return _clipFar;}
-            SLCamAnim       camAnim         () {return _camAnim;}
-            SLstring        animationStr    ();
-            SLuint          numRendered     () {return _numRendered;}
-            SLfloat         focalDist       () {return _focalDist;} 
-            SLfloat         lensDiameter    () {return _lensDiameter;}
+            SLfloat         unitScaling     () {return _unitScaling;}     
+
+            SLfloat         fov             () const {return _fov;}
+            SLfloat         aspect          () const {return _aspect;}
+            SLfloat         clipNear        () const {return _clipNear;}
+            SLfloat         clipFar         () const {return _clipFar;}
+            SLCamAnim       camAnim         () const {return _camAnim;}
+            SLstring        animationStr    () const;
+            SLuint          numRendered     () const {return _numRendered;}
+            SLfloat         focalDist       () const {return _focalDist;} 
+            SLfloat         lensDiameter    () const {return _lensDiameter;}
             SLSamples2D*    lensSamples     () {return &_lensSamples;} 
-            SLfloat         eyeSeparation   () {return _eyeSeparation;}
-            SLfloat         focalDistScrW   ();
-            SLfloat         focalDistScrH   ();
+            SLfloat         eyeSeparation   () const {return _eyeSeparation;}
+            SLfloat         focalDistScrW   () const;
+            SLfloat         focalDistScrH   () const;
             SLRay*          lookAtRay       () {return &_lookAtRay;}
-            SLfloat         speedLimit      () {return _speedLimit;}
-            SLbool          useDeviceRot    () {return _useDeviceRot;}
-            SLstring        toString        ();
+            SLfloat         maxSpeed        () const {return _maxSpeed;}
+            SLbool          useDeviceRot    () const {return _useDeviceRot;}
+            SLstring        toString        () const;
    
 
     // Static global default parameters for new cameras
@@ -145,9 +149,15 @@ class SLCamera: public SLNode
             SLCamAnim       _camAnim;               //!< Type of camera animation
             SLVec2f         _oldTouchPos1;          //!< Old mouse/thouch position in pixels
             SLVec2f         _oldTouchPos2;          //!< Old 2nd finger touch position in pixels
-            SLVec3f         _maxSpeed;              //!< max. speed per axis
-            SLVec3f         _curSpeed;              //!< current speed per axis
-            SLfloat         _speedLimit;            //!< speed limit per sec. for all axis
+
+            SLVec3f         _moveDir;               //!< accumulated movement directions based on pressed buttons
+            SLfloat         _drag;                  //!< simple constant drag that affects velocity
+            SLfloat         _maxSpeed;              //!< maximum speed in m/s, with high drag values this speed might not be achievable at all
+            SLVec3f         _velocity;              //!< current velocity vector
+            SLVec3f         _acceleration;          //!< current acceleration vector
+            SLfloat         _brakeAccel;            //!< brake acceleration
+            SLfloat         _moveAccel;             //!< move acceleration
+            
             SLbool          _useDeviceRot;          //!< Flag if mobile device or oculus Rift rotation should be used 
                
             // ray tracing parameters
@@ -158,7 +168,7 @@ class SLCamera: public SLNode
 
             // Stereo rendering & VR
             SLfloat         _eyeSeparation;         //!< eye separation for stereo mode
-            SLfloat         _unitScaling            //!< default unit's are meters, change unit scaling to convert to other mesurements
+            SLfloat         _unitScaling;           //!< indicate what the current unit scaling is to ajust movement and stereo rendering correctly
 };
 //-----------------------------------------------------------------------------
 #endif
