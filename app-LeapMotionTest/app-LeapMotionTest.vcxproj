@@ -175,6 +175,7 @@
     <ClInclude Include="CustomSceneView.h" />
     <ClInclude Include="SampleListeners.h" />
     <ClInclude Include="SLLeapController.h" />
+    <ClInclude Include="SLLeapDefines.h" />
     <ClInclude Include="SLLeapFinger.h" />
     <ClInclude Include="SLLeapGesture.h" />
     <ClInclude Include="SLLeapHand.h" />

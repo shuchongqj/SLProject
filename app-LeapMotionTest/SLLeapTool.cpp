@@ -10,6 +10,7 @@
 
 #include <stdafx.h>
 #include "SLLeapTool.h"
+#include <SLLeapDefines.h>
 
 
 SLQuat4f SLLeapTool::toolRotation() const
@@ -21,10 +22,10 @@ SLQuat4f SLLeapTool::toolRotation() const
 SLVec3f SLLeapTool::toolTipPosition() const
 {
     Leap::Vector pos = _tool.tipPosition();
-    return SLVec3f(pos.x, pos.y, pos.z) *0.01f; // @todo add the unit scaling as a constant define
+    return SLVec3f(pos.x, pos.y, pos.z) * LM_TO_SL_UNITS;
 }
 SLVec3f SLLeapTool::toolTipVelocity() const
 {
     Leap::Vector vel = _tool.tipVelocity();
-    return SLVec3f(vel.x, vel.y, vel.z);
+    return SLVec3f(vel.x, vel.y, vel.z) * LM_TO_SL_UNITS; // return our scaled units/s instead of millimeters/s
 }

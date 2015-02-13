@@ -650,6 +650,15 @@ void SLSceneView::draw3DGLNodes(SLVNode &nodes)
         // Set the view transform
         _stateGL->modelViewMatrix.setMatrix(_stateGL->viewMatrix);
       
+        if (nodes[i]->name() == "fucking parent") {
+            SLMat4f wm = nodes[i]->updateAndGetWM();
+            int as = 0;
+        } else
+        if (nodes[i]->name() == "fucking palm") {
+            SLMat4f wm = nodes[i]->updateAndGetWM();
+            int as = 0;
+        }
+
         // Apply world transform
         _stateGL->modelViewMatrix.multiply(nodes[i]->updateAndGetWM().m());
       

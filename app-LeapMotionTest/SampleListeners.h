@@ -28,27 +28,27 @@ class SampleHandListener : public SLLeapHandListener
 public:
     void init()
     {
-        SLNode* parent = new SLNode;
-        //parent->scale(0.01f);
+        SLNode* parent = new SLNode("fucking parent");
+        parent->scale(10.0f);
         SLScene::current->root3D()->addChild(parent);
 
         
-        SLMesh* palmMesh = new SLBox(-0.15f, -0.05f, -0.15f, 0.15f, 0.05f, 0.15f);
-        SLMesh* jointMesh = new SLSphere(0.05f);
-        SLMesh* jointMeshBig = new SLSphere(0.1f);
-        SLMesh* boneMesh = new SLCylinder(0.015f, 1.0f);
+        SLMesh* palmMesh = new SLBox(-0.015f, -0.005f, -0.015f, 0.015f, 0.005f, 0.015f);
+        SLMesh* jointMesh = new SLSphere(0.005f);
+        SLMesh* jointMeshBig = new SLSphere(0.01f);
+        SLMesh* boneMesh = new SLCylinder(0.0015f, 0.1f);
         
-        leftHand = new SLNode(palmMesh);
+        leftHand = new SLNode(palmMesh, "fucking palm");
         rightHand = new SLNode(palmMesh);
         
         leftArm = new SLNode;
         rightArm = new SLNode;
         SLNode* tempCont = new SLNode(boneMesh);
-        tempCont->position(0, 0, -1.4f);
+        tempCont->position(0, 0, -0.14f);
         tempCont->scale(2.8f);
         leftArm->addChild(tempCont);
         tempCont = new SLNode(boneMesh);
-        tempCont->position(0, 0, -1.4f);
+        tempCont->position(0, 0, -0.14f);
         tempCont->scale(2.8f);
         rightArm->addChild(tempCont);
 
@@ -78,7 +78,7 @@ public:
             // bones
             for (SLint j = 0; j < 4; ++j) {
                 SLNode* meshCont = new SLNode(boneMesh);
-                meshCont->position(0, 0, -0.5 * boneScales[i][j]);
+                meshCont->position(0, 0, -0.5 * boneScales[i][j] * 0.1f);
                 meshCont->scale(1, 1, boneScales[i][j]);
                 
                 leftBones[i][j] = new SLNode;
@@ -87,7 +87,7 @@ public:
 
                 
                 meshCont = new SLNode(boneMesh);
-                meshCont->position(0, 0, -0.5 * boneScales[i][j]);
+                meshCont->position(0, 0, -0.5 * boneScales[i][j] * 0.1f);
                 meshCont->scale(1, 1, boneScales[i][j]);
                 
                 rightBones[i][j] = new SLNode;
@@ -107,6 +107,7 @@ public:
         parent->addChild(rightElbow);
         parent->addChild(leftWrist);
         parent->addChild(rightWrist);
+        parent->needUpdate();
     }
 
 protected:
@@ -137,16 +138,16 @@ protected:
             SLNode* arm = (hands[i].isLeft()) ? leftArm : rightArm;
             
             hand->position(hands[i].palmPosition());            
-            hand->rotation(hands[i].palmRotation(), TS_World);
+            hand->rotation(hands[i].palmRotation(), TS_Parent);
             
             SLQuat4f test = hands[i].palmRotation();
-            hand->rotation(hands[i].palmRotation(), TS_World);
+            hand->rotation(hands[i].palmRotation(), TS_Parent);
 
             elbow->position(hands[i].elbowPosition());
             wrist->position(hands[i].wristPosition());
             
             arm->position(hands[i].armCenter());
-            arm->rotation(hands[i].armRotation(), TS_World);
+            arm->rotation(hands[i].armRotation(), TS_Parent);
 
 
             for (SLint j = 0; j < hands[i].fingers().size(); ++j)
@@ -161,7 +162,7 @@ protected:
                 for (SLint k = 0; k < 4; ++k) {                    
                     SLNode* bone = (hands[i].isLeft()) ? leftBones[j][k] : rightBones[j][k];
                     bone->position(hands[i].fingers()[j].boneCenter(k));
-                    bone->rotation(hands[i].fingers()[j].boneRotation(k), TS_World);
+                    bone->rotation(hands[i].fingers()[j].boneRotation(k), TS_Parent);
                 }
             }
         }
@@ -178,7 +179,7 @@ public:
         SLScene* s = SLScene::current;
         
         SLMesh* toolTipMesh = new SLSphere(0.03f);
-        SLMesh* toolMesh = new SLCylinder(0.015f, 5.0f);
+        SLMesh* toolMesh = new SLCylinder(0.015f, 2.0f);
         
         _toolNode = new SLNode;
         _toolNode->addMesh(toolTipMesh);
@@ -224,16 +225,13 @@ class SLRiggedLeapHandListener : public SLLeapHandListener
 {
 public:
     SLRiggedLeapHandListener()
+        : _modelScale(1.0f)
     {
         for (SLint i = 0; i < 5; ++i) {
             for (SLint j = 0; j < 4; ++j) {
                 _leftFingers[i][j] = _rightFingers[i][j] = NULL;
             }
         }
-        axis1 = SLVec3f(1, 0, 0);
-        axis2 = SLVec3f(0, 1, 0);
-        axis2 = SLVec3f(0, 0, 1);
-        dir = 1;
     }
 
     void setSkeleton(SLSkeleton* skel){
@@ -256,6 +254,9 @@ public:
     {
 
     }
+
+    void setModelScale(SLfloat s) { _modelScale = s; }
+
     // @todo provide enums for finger type and bone type
     void setLFingerJoint(SLint fingerType, SLint boneType, const SLstring& name)
     {
@@ -272,21 +273,6 @@ public:
         _rightFingers[fingerType][boneType] = _skeleton->getJoint(name);
     }
 
-    /*
-    leap bone types
-        TYPE_METACARPAL = 0     Bone connected to the wrist inside the palm.
-        TYPE_PROXIMAL = 1       Bone connecting to the palm.
-        TYPE_INTERMEDIATE = 2   Bone between the tip and the base.
-        TYPE_DISTAL = 3         Bone at the tip of the finger.
-    */
-
-    SLQuat4f correction1;
-    SLQuat4f correction2;
-    SLVec3f axis1;
-    SLVec3f axis2;
-    SLVec3f axis3;
-    int dir;
-
 protected:
     
     SLSkeleton* _skeleton;
@@ -294,6 +280,7 @@ protected:
     SLJoint* _rightFingers[5][4];
     SLJoint* _leftWrist;
     SLJoint* _rightWrist;
+    SLfloat _modelScale;
 
     virtual void onLeapHandChange(const vector<SLLeapHand>& hands)
     {
@@ -303,7 +290,7 @@ protected:
             SLJoint* jnt = (hands[i].isLeft()) ? _leftWrist : _rightWrist;
 
             jnt->rotation(rot, TS_World);
-            jnt->position(hands[i].palmPosition()*7.5, TS_World);
+            jnt->position(hands[i].palmPosition() * _modelScale, TS_World); // note the correction for the models scaling
             
             for (SLint j = 0; j < hands[i].fingers().size(); ++j)
             {                
@@ -354,11 +341,12 @@ protected:
             SLint index = (left) ? 0 : 1;
 
             // For now just the intermediate position between thumb and index finger
-            // @note  a pinch can also be between any other finger and the tumb, so this
+            // @note  a pinch can also be between any other finger and the ttumb, so this
             //        currently only works for index and thumb pinches
             SLVec3f grabPosition = hand.fingers()[0].tipPosition() + 
                                    hand.fingers()[1].tipPosition();
             grabPosition *= 0.5f;
+            grabPosition *= 10.0f;
             SLQuat4f palmRotation = hand.palmRotation();
 
             if (hand.pinchStrength() > grabThreshold) {
