@@ -13,7 +13,6 @@
 #include <SLLeapDefines.h>
 
 SLLeapHand::SLLeapHand()
-:_scaling(0.001f) // default unit scaling to receive position in meters
 {
     for (SLint i = 0; i < 5; ++i)
         _fingers.push_back(SLLeapFinger((Leap::Finger::Type)i));
