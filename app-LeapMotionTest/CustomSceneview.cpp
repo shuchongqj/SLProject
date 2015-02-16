@@ -306,7 +306,7 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd cmd)
     scene->addChild(riggedHands);
 
     // table
-    SLNode* table = importer.load("DAE/Table/table5.dae");
+    SLNode* table = importer.load("DAE/Table/table.dae");
     table->translate(0, 0, -1);
     scene->addChild(table);
 
