@@ -36,7 +36,7 @@ void drawXZGrid(const SLMat4f& mat)
         SLint gridLineNum = 21;
         gridLineNum += gridLineNum%2 - 1; // make sure grid is odd
         SLint gridHalf = gridLineNum / 2;
-        SLfloat gridSize = 2;
+        SLfloat gridSize = 1;
         SLfloat gridMax = (SLfloat)gridHalf/(gridLineNum-1) * gridSize;
         SLfloat gridMin = -gridMax;
 
@@ -72,6 +72,7 @@ void drawXZGrid(const SLMat4f& mat)
                 gridVert.push_back(SLVec3f(offset, 0, gridMax));
             }
         }
+
         grid.generate(&gridVert[0], gridVert.size(), 3);
 
         initialized = true;
@@ -305,7 +306,7 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd cmd)
     scene->addChild(riggedHands);
 
     // table
-    SLNode* table = importer.load("DAE/Table/table3.dae");
+    SLNode* table = importer.load("DAE/Table/table5.dae");
     table->translate(0, 0, -1);
     scene->addChild(table);
 
@@ -343,8 +344,8 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd cmd)
     scene->addChild(crate);
 
     SLCamera* cam1 = new SLCamera();
-    cam1->position(0, 1.8f, 0);
-    cam1->lookAt(0, 1.8f, -1.0f);
+    cam1->position(0, 1.67f, 0);    // eye height for 180cm high male
+    cam1->lookAt(0, 1.67f, -1.0f);
     cam1->focalDist(22);
     cam1->setInitialState();
     cam1->camAnim(walkingYUp);
@@ -367,7 +368,7 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd cmd)
     charAnim->playForward();
     charAnim->playbackRate(2.0f);
 
-    astroboySmall->translate(0.0f, 1.4f, -1.0f);
+    astroboySmall->translate(0.0f, 1.1f, -1.0f);
     astroboySmall->scale(0.1f);
     scene->addChild(astroboySmall);
 
@@ -430,8 +431,8 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd cmd)
     indicatorData indicators[] = {
         // pos                             y rot    y scale text
         indicatorData(3.0f, 0.0f, -0.2f,    -20.0f,    1.0f,   "1m"),
-        indicatorData(0.7f, 0.0f, -0.8f,    0.0f,    1.4f,   "1.40m"),
-        indicatorData(0.05f, 1.4f, -1.0f,    0.0f,    0.18f,   "18cm"),
+        indicatorData(0.7f, 0.0f, -0.8f,    0.0f,    1.1f,   "1.10m"),
+        indicatorData(0.05f, 1.1f, -1.0f,    0.0f,    0.18f,   "18cm"),
         indicatorData(-1.2f, 0.0f, -1.0f,    0.0f,    1.8f,   "1.80m"),
         indicatorData(-2.8f, 0.0f, 0.2f,    60.0f,    2.0f,   "2m"),
         indicatorData(-2.0f, 0.0f, -7.0f,   20.0f,   4.0f,   "4m")
@@ -488,14 +489,18 @@ void CustomSceneView::postSceneLoad()
     _leapController.registerHandListener(&_objectMover);
     
     // init the tool and hand listener (aka build the meshes and add them to the scene root)
-    _slHandListener.init();
+    _slHandListener.init(25.0f);
+    _slHandListener.setOrigin(SLVec3f(0.0f, 1.0f, -4.0f));
+    _objectMover.setOrigin(SLVec3f(0.0f, 1.0f, -4.0f));
+    _objectMover.setScaling(25.0f); // same as slhandlistener to move our boxes
     _slToolListener.init();
 
     // set the skeleton that this rigged listener should control
     // @todo allow for an easier way to search and find the desired skeleton via name strings
     _riggedListener.setSkeleton(SLScene::current->animManager().skeletons()[0]);
     _riggedListener.setModelScale(100); // this particular model is scaled down by 0.01 to fit real life units (meters) 
-    
+    _riggedListener.setOrigin(SLVec3f(0, 1.1f, -0.6f));
+
     //_riggedListener.setScaleCorrection(SLVec3f(10, 10, 10));
 
     // set the wrist joints
@@ -587,17 +592,26 @@ void CustomSceneView::postSceneLoad()
     _currentGrabbedObject[0] = NULL;
     _currentGrabbedObject[1] = NULL;
 
-    SLfloat colSpacing = 0.5f;
-    SLfloat rowSpacing = 0.5f;
+    SLfloat colSpacing = 1.1f;
+    SLfloat rowSpacing = 1.1f;
     SLint cols = 10;
     SLint rows = 5;
     SLint index = 0;
+
+    SLScene::current->meshes()[7];
+
     for (SLint i = 0; i < cols; ++i) {
         for(SLint j = 0; j < rows; ++j) {
 
-            _movableBoxes.push_back(new SLNode(new SLBox(-0.15f, -0.15f, -0.15f, 0.15f, 0.15f, 0.15f)));
-            SLScene::current->root3D()->addChild(_movableBoxes[index]);
-            _movableBoxes[index++]->translate((float)i * colSpacing - 0.5f * (float)cols * colSpacing, 2.0f + rowSpacing * (float)j, 0.0f);
+            SLNode* node = new SLNode;
+            SLNode* childNode = new SLNode;
+            childNode->addMesh(SLScene::current->meshes()[8]);
+            childNode->translate(0, -0.5f, 0); // make sure local origin is in the middle of the visible mesh for 'node'
+            node->addChild(childNode);
+            SLScene::current->root3D()->addChild(node);
+            node->position((float)i * colSpacing - 0.5f * (float)cols * colSpacing, 2.0f + rowSpacing * (float)j + 1.5f, -5.0f, TS_World);
+
+            _movableBoxes.push_back(node);
         }
     }
 
@@ -614,9 +628,10 @@ void CustomSceneView::preDraw()
 
 
 void CustomSceneView::postDraw()
-{
+{/*
     // hacked in world grid with x, z axes marked by color
-    drawXZGrid(_camera->updateAndGetVM());
+    SLMat4f orig(0.0f, 1.11f, -1.0f); // move origin on the table
+    drawXZGrid(_camera->updateAndGetVM() * orig);*/
 }
 
 
@@ -640,7 +655,7 @@ void CustomSceneView::grabCallback(SLVec3f& pos, SLQuat4f& rot, bool isLeft)
     _prevRotation[index] = rot;
     _prevPosition[index] = pos;
     
-    SLfloat radius = 0.2f;
+    SLfloat radius = 0.6f;
     for (auto cube : _movableBoxes) {
         if (cube->position().x - radius < pos.x &&
             cube->position().y - radius < pos.y &&

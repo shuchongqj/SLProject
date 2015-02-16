@@ -312,7 +312,7 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd sceneName)
         light2->ambient(SLCol4f(0.1f, 0.1f, 0.1f));
         light2->diffuse(SLCol4f(1.0f, 1.0f, 1.0f));
         light2->specular(SLCol4f(1.0f, 1.0f, 1.0f));
-        light2->attenuation(1,0,0);
+        light2->attenuation(1,0,0);     
         //light2->samples(8,8); // soft shadows for RT
         anim = SLAnimation::create("anim_light2_updown", 2.0f, true, EC_inOutQuint, AL_pingPongLoop);
         anim->createSimpleTranslationNodeTrack(light2, SLVec3f(0.0f, 5.0f, 0.0f));
@@ -433,7 +433,7 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd sceneName)
         scene->addChild(crate);
 
         SLCamera* cam1 = new SLCamera();
-        cam1->translation(0, 1.67f, 0);    // eye height for 180cm high male
+        cam1->position(0, 1.67f, 0);    // eye height for 180cm high male
         cam1->lookAt(0, 1.67f, -1.0f);
         cam1->focalDist(22);
         cam1->setInitialState();
@@ -456,7 +456,7 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd sceneName)
         charAnim = importer.skeleton()->getAnimPlayback("unnamed_anim_0");
         charAnim->playForward();
         charAnim->playbackRate(2.0f);
-        
+
         astroboySmall->translate(0.0f, 1.1f, -1.0f);
         astroboySmall->scale(0.1f);
         scene->addChild(astroboySmall);
@@ -879,7 +879,7 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd sceneName)
     {
         name("Texturing: Filter Compare and 3D texture");
         info(sv, "Texture filters: Bottom: nearest, left: linear, top: linear mipmap, right: anisotropic");
-        
+
         // Create 4 textures with different filter modes
         SLGLTexture* texB = new SLGLTexture("brick0512_C.png"
                                             ,GL_NEAREST
@@ -934,7 +934,7 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd sceneName)
         VR.push_back(SLVec3f( 0.5f,-0.5f,-2.0f));
         SLNode* polyR = new SLNode(new SLPolygon(VR, T, "PolygonR", matR));
 
-        
+
         #ifdef SL_GLES2
         // Create 3D textured sphere mesh and node
         SLNode* sphere = new SLNode(new SLSphere(0.2f, 16, 16, "Sphere", matL));
@@ -977,7 +977,7 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd sceneName)
         #ifndef SL_GLES2
         scene->addChild(pyramidNode);
         #endif
-        
+
         _backColor.set(SLCol4f(0.2f,0.2f,0.2f));
         sv->camera(cam1);
         _root3D = scene;
@@ -1538,7 +1538,7 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd sceneName)
         SLNode* character = importer.load("DAE/AstroBoy/AstroBoy.dae");
         #endif
         SLAnimPlayback* charAnim = importer.skeleton()->getAnimPlayback("unnamed_anim_0");
-        
+
         #if defined(SL_OS_IOS) || defined(SL_OS_ANDROID)
         SLNode* box1 = importer.load("skinnedcube2.dae");
         #else
@@ -1973,10 +1973,10 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd sceneName)
         // define materials
         SLMaterial* matGla = new SLMaterial("Glass", SLCol4f(0.0f, 0.0f, 0.0f),
                                                      SLCol4f(0.5f, 0.5f, 0.5f),
-                                                     100, 0.4f, 0.6f, 1.5f);
+                                                    100, 0.4f, 0.6f, 1.5f);
         SLMaterial* matRed = new SLMaterial("Red",   SLCol4f(0.5f, 0.0f, 0.0f),
                                                      SLCol4f(0.5f, 0.5f, 0.5f),
-                                                     100, 0.5f, 0.0f, 1.0f);
+                                                    100, 0.5f, 0.0f, 1.0f);
         SLMaterial* matYel = new SLMaterial("Floor", SLCol4f(0.8f, 0.6f, 0.2f),
                                                      SLCol4f(0.8f, 0.8f, 0.8f),
                                                      100, 0.5f, 0.0f, 1.0f);

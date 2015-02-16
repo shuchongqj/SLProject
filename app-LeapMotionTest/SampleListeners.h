@@ -26,10 +26,10 @@ class SampleListener : public Leap::Listener {
 class SampleHandListener : public SLLeapHandListener
 {
 public:
-    void init()
+    void init(SLfloat scl = 1.0f)
     {
         SLNode* parent = new SLNode("fucking parent");
-        parent->scale(10.0f);
+        parent->scale(scl);
         SLScene::current->root3D()->addChild(parent);
 
         
@@ -110,6 +110,9 @@ public:
         parent->needUpdate();
     }
 
+    void setOrigin(SLVec3f& orig) { _position = orig; }
+    void setOrientation(SLQuat4f& orient) { _orientation = orient; }
+
 protected:
     SLNode* leftHand;
     SLNode* rightHand;
@@ -128,10 +131,13 @@ protected:
     SLNode* leftWrist;
     SLNode* rightWrist;
 
+    SLVec3f _position;
+    SLQuat4f _orientation;
+
     virtual void onLeapHandChange(const vector<SLLeapHand>& hands)
     {
         for (SLint i = 0; i < hands.size(); ++i)
-        {
+        {/*
             SLNode* hand = (hands[i].isLeft()) ? leftHand : rightHand;
             SLNode* elbow = (hands[i].isLeft()) ? leftElbow : rightElbow;
             SLNode* wrist = (hands[i].isLeft()) ? leftWrist : rightWrist;
@@ -147,22 +153,24 @@ protected:
             wrist->position(hands[i].wristPosition());
             
             arm->position(hands[i].armCenter());
-            arm->rotation(hands[i].armRotation(), TS_Parent);
+            arm->rotation(hands[i].armRotation(), TS_Parent);*/
 
+            // @todo the above code is commented out because we experiance lag spikes when this listener has to process two hands. very strange, not resolved.
 
             for (SLint j = 0; j < hands[i].fingers().size(); ++j)
             {
                 // set joint positions
+                
                 for (SLint k = 0; k < 5; ++k) {
                     SLNode* joint = (hands[i].isLeft()) ? leftJoints[j][k] : rightJoints[j][k];
-                    joint->position(hands[i].fingers()[j].jointPosition(k));
+                    joint->position(hands[i].fingers()[j].jointPosition(k) + _position * 0.04f);
                 }
                 
                 // set bone positions
                 for (SLint k = 0; k < 4; ++k) {                    
                     SLNode* bone = (hands[i].isLeft()) ? leftBones[j][k] : rightBones[j][k];
-                    bone->position(hands[i].fingers()[j].boneCenter(k));
-                    bone->rotation(hands[i].fingers()[j].boneRotation(k), TS_Parent);
+                    bone->position(hands[i].fingers()[j].boneCenter(k) + _position* 0.04f);
+                    bone->rotation(hands[i].fingers()[j].boneRotation(k) * _orientation, TS_Parent);
                 }
             }
         }
@@ -256,6 +264,8 @@ public:
     }
 
     void setModelScale(SLfloat s) { _modelScale = s; }
+    void setOrigin(SLVec3f& orig) { _position = orig; }
+    void setOrientation(SLQuat4f& orient) { _orientation = orient; }
 
     // @todo provide enums for finger type and bone type
     void setLFingerJoint(SLint fingerType, SLint boneType, const SLstring& name)
@@ -282,15 +292,18 @@ protected:
     SLJoint* _rightWrist;
     SLfloat _modelScale;
 
+    SLVec3f _position;  //!< origin position for the hands
+    SLQuat4f _orientation; //!< origin orientation for the hands
+
     virtual void onLeapHandChange(const vector<SLLeapHand>& hands)
     {
         for (SLint i = 0; i < hands.size(); ++i)
         {
-            SLQuat4f rot = hands[i].palmRotation();
+            SLQuat4f rot = hands[i].palmRotation() * _orientation;
             SLJoint* jnt = (hands[i].isLeft()) ? _leftWrist : _rightWrist;
 
             jnt->rotation(rot, TS_World);
-            jnt->position(hands[i].palmPosition() * _modelScale, TS_World); // note the correction for the models scaling
+            jnt->position((hands[i].palmPosition() + _position) * _modelScale, TS_World); // note the correction for the models scaling
             
             for (SLint j = 0; j < hands[i].fingers().size(); ++j)
             {                
@@ -299,7 +312,7 @@ protected:
                     if (bone == NULL)
                         continue;
 
-                    bone->rotation(hands[i].fingers()[j].boneRotation(k), TS_World);
+                    bone->rotation(hands[i].fingers()[j].boneRotation(k) * _orientation, TS_World);
                 }
             }
         }
@@ -321,10 +334,15 @@ public:
     void setGrabCallback(std::function<void(SLVec3f&, SLQuat4f&, bool)> cb) { grabCallback = cb; }
     void setReleaseCallback(std::function<void(bool)> cb) { releaseCallback = cb; }
     void setMoveCallback(std::function<void(SLVec3f&, SLQuat4f&, bool)> cb) { moveCallback = cb; }
-
+    
+    void setOrigin(SLVec3f& orig) { _position = orig; }
+    void setScaling(SLfloat scl) { _scaling = scl; }
 protected:
     SLfloat grabThreshold;
     SLbool grabbing[2];
+
+    SLVec3f _position;
+    SLfloat _scaling;
 
     std::function<void(SLVec3f&, SLQuat4f&, bool)> grabCallback;
     std::function<void(bool)> releaseCallback;
@@ -346,7 +364,9 @@ protected:
             SLVec3f grabPosition = hand.fingers()[0].tipPosition() + 
                                    hand.fingers()[1].tipPosition();
             grabPosition *= 0.5f;
-            grabPosition *= 10.0f;
+            grabPosition *= _scaling;
+            grabPosition += _position;
+
             SLQuat4f palmRotation = hand.palmRotation();
 
             if (hand.pinchStrength() > grabThreshold) {

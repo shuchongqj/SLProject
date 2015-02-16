@@ -32,15 +32,10 @@ public:
     SLVec3f     armCenter       () const;
     SLVec3f     armDirection    () const;
     SLQuat4f    armRotation     () const;
-
-    SLfloat     scaling         () const { return _scaling; }
-
+    
     SLbool      isLeft          () const { return _hand.isLeft(); }
 
     void        leapHand        (const Leap::Hand& hand);
-
-    // setter
-    void        scaling         (SLfloat s) { _scaling = s; }
 
     // return iterator over fingers
     const SLVLeapFinger& fingers() const { return _fingers; }
@@ -51,7 +46,6 @@ public:
 protected:
     Leap::Hand      _hand;      //!< Leap hand object
     SLVLeapFinger   _fingers;   //!< Vector of all SLLeapFinger objects for this hand
-    SLfloat         _scaling;   //!< unit scaling, leapmotion uses millimters as a unit
 };
 
 #endif
