@@ -34,7 +34,8 @@ SLCamera::SLCamera()
       _moveAccel(16.0f),
       _moveDir(0, 0, 0),
       _acceleration(0, 0, 0),
-      _unitScaling(1.0f)
+      _unitScaling(1.0f),
+      _eyeHeight(1.67f)
 {  
     _fovInit      = 0;
     _clipNear     = 0.1f;
@@ -71,22 +72,29 @@ SLbool SLCamera::camUpdate(SLfloat elapsedTimeMS)
     SLbool braking = false;
     if (_moveDir != SLVec3f::ZERO)
     {   
-        // x and z movement direction vector should be projected on the x,z plane while
-        // but still in local space
-        // the y movement direction should alway be in world space
-        SLVec3f f = forward();
-        f.y = 0;
-        f.normalize();
+        if (_camAnim == flyingYUp)
+        {
+            _acceleration = _moveDir.normalized() * _moveAccel;
+        }
+        else
+        {
+            // x and z movement direction vector should be projected on the x,z plane while
+            // but still in local space
+            // the y movement direction should alway be in world space
+            SLVec3f f = forward();
+            f.y = 0;
+            f.normalize();
 
-        SLVec3f r = right();
-        r.y = 0;
-        r.normalize();
+            SLVec3f r = right();
+            r.y = 0;
+            r.normalize();
 
-        _acceleration = f * -_moveDir.z + r * _moveDir.x;
-        _acceleration.y = _moveDir.y;
-        _acceleration.normalize();
-        _acceleration *= _moveAccel;
-
+            _acceleration = f * -_moveDir.z + r * _moveDir.x;
+            _acceleration.y = _moveDir.y;
+            _acceleration.normalize();
+            _acceleration *= _moveAccel;
+        }
+        
     } // accelerate in the opposite velocity to brake
     else
     {  
@@ -118,7 +126,10 @@ SLbool SLCamera::camUpdate(SLfloat elapsedTimeMS)
     // adjust for scaling (if the character is shrinked or enlarged)
     delta *= _unitScaling;
 
-    translate(delta, TS_World);
+    if (_camAnim == flyingYUp)
+        translate(delta, TS_Local);
+    else
+        translate(delta, TS_World);
     
     //SL_LOG("cs: %3.2f | %3.2f, %3.2f, %3.2f\n", _velocity.length(), _acceleration.x, _acceleration.y, _acceleration.z);
 
@@ -550,7 +561,11 @@ void SLCamera::setView(SLSceneView* sv, const SLEye eye)
                 if (s->oculus()->isConnected())
                 {
                     rotation = s->oculus()->orientation(eye);
-                    trackingPos.translate(-s->oculus()->position(eye)*_eyeSeparation);
+                    trackingPos.translate(-(s->oculus()->position(eye) + SLVec3f(0, _eyeHeight, 0)) * _unitScaling);
+                    SLbool tracked = s->oculus()->isPositionTracked();
+                    if (tracked) {
+                        SLint d = 0;
+                    }
                 }
                 else rotation = sv->deviceRotation();
 
@@ -593,8 +608,9 @@ SLstring SLCamera::animationStr() const
     switch (_camAnim)
     {   case turntableYUp: return "Turntable Y up";
         case turntableZUp: return "Turntable Z up";
-        case walkingYUp:  return "Walking Y up";
-        case walkingZUp:  return "Walking Z up";
+        case walkingYUp:   return "Walking Y up";
+        case flyingYUp:    return "Flying Y up";
+        case walkingZUp:   return "Walking Z up";
         default: return "unknown";
     }
 }
@@ -673,7 +689,7 @@ SLbool SLCamera::onMouseMove(const SLMouseButton button,
             _om.setMatrix(rot * _om);
             needWMUpdate();
         }
-        else if (_camAnim==walkingYUp) //....................................
+        else if (_camAnim==walkingYUp ||_camAnim == flyingYUp) //....................................
         {
             dY *= 0.5f; 
             dX *= 0.5f; 
@@ -801,7 +817,7 @@ SLbool SLCamera::onMouseWheel(const SLint delta, const SLKey mod)
         }
         return true;
     }
-    else if (_camAnim==walkingYUp || _camAnim==walkingZUp) //...................
+    else if (_camAnim==walkingYUp || _camAnim==walkingZUp || _camAnim==flyingYUp) //...................
     {  
         _maxSpeed *= (1.0f + sign*0.1f);
     }
@@ -895,7 +911,7 @@ SLbool SLCamera::onTouch2Move(const SLint x1, const SLint y1,
             // apply delta to x- and y-position
             translate(SLVec3f(-delta.x, delta.y, 0), TS_Local);
         } 
-        else if (_camAnim == walkingYUp || _camAnim == walkingZUp)
+        else if (_camAnim == walkingYUp || _camAnim == walkingZUp || _camAnim==flyingYUp)
         {
             //_moveDir.x = delta.x * 100.0f,
             //_moveDir.z = delta.y * 100.0f;
@@ -923,7 +939,7 @@ SLbool SLCamera::onTouch2Move(const SLint x1, const SLint y1,
             translate(SLVec3f(0, 0, delta), TS_Local);
 
         } 
-        else if (_camAnim == walkingYUp)
+        else if (_camAnim == walkingYUp || _camAnim == flyingYUp)
         {  
             // change field of view
             _fov += SL_sign(delta) * 0.5f;

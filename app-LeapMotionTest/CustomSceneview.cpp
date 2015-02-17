@@ -303,6 +303,7 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd cmd)
     // scene skybox
     // load hand mesh
     SLNode* riggedHands = importer.load("DAE/Hands/rigged_hands.dae");
+    riggedHands->scale(1.5f);// the default hands are ~13cm this scaling change makes them 20cm long
     scene->addChild(riggedHands);
 
     // table
@@ -344,11 +345,13 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd cmd)
     scene->addChild(crate);
 
     SLCamera* cam1 = new SLCamera();
-    cam1->position(0, 1.67f, 0);    // eye height for 180cm high male
-    cam1->lookAt(0, 1.67f, -1.0f);
+    cam1->eyeHeight(1.67f); // set vr eye height
+    cam1->position(0, 0.0f, 0);    // eye height for 180cm high male
+    cam1->lookAt(0, 0.0f, -1.0f);
     cam1->focalDist(22);
     cam1->setInitialState();
     cam1->camAnim(walkingYUp);
+    //cam1->camAnim(flyingYUp);
     scene->addChild(cam1);
 
     // big astroboy
@@ -498,7 +501,7 @@ void CustomSceneView::postSceneLoad()
     // set the skeleton that this rigged listener should control
     // @todo allow for an easier way to search and find the desired skeleton via name strings
     _riggedListener.setSkeleton(SLScene::current->animManager().skeletons()[0]);
-    _riggedListener.setModelScale(100); // this particular model is scaled down by 0.01 to fit real life units (meters) 
+    _riggedListener.setModelScale(66.6666666f); // this particular model is scaled down by 0.01 to fit real life units (meters) 
     _riggedListener.setOrigin(SLVec3f(0, 1.1f, -0.6f));
 
     //_riggedListener.setScaleCorrection(SLVec3f(10, 10, 10));

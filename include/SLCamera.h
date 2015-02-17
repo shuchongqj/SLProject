@@ -78,6 +78,7 @@ class SLCamera: public SLNode
             void            setFrustumPlanes();
 
             // Setters
+            void            eyeHeight       (SLfloat h)          { _eyeHeight = h; }
             void            unitScaling     (SLfloat s)          {_unitScaling = s; }
 
             void            projection      (SLProjection p)     {_projection = p;
@@ -167,6 +168,7 @@ class SLCamera: public SLNode
             SLSamples2D     _lensSamples;           //!< samplepoints for lens sampling (dof)
 
             // Stereo rendering & VR
+            SLfloat         _eyeHeight;             //!< height of the eyes, scales with the _unitScaling parameter
             SLfloat         _eyeSeparation;         //!< eye separation for stereo mode
             SLfloat         _unitScaling;           //!< indicate what the current unit scaling is to ajust movement and stereo rendering correctly
 };
