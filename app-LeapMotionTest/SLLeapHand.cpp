@@ -15,7 +15,7 @@
 SLLeapHand::SLLeapHand()
 {
     for (SLint i = 0; i < 5; ++i)
-        _fingers.push_back(SLLeapFinger((Leap::Finger::Type)i));
+        _fingers.push_back(SLLeapFinger((SLFingerType)i));
 }
 
 SLVec3f SLLeapHand::palmPosition() const

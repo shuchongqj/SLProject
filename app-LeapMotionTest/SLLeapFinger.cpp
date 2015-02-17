@@ -13,7 +13,7 @@
 #include "SLLeapFinger.h"
 #include <SLLeapDefines.h>
 
-SLLeapFinger::SLLeapFinger(Leap::Finger::Type type)
+SLLeapFinger::SLLeapFinger(SLFingerType type)
     : _fingerType(type)
 { }
 
@@ -43,7 +43,7 @@ SLVec3f SLLeapFinger::jointPosition(SLint joint) const
     return SLVec3f(pos.x, pos.y, pos.z) * LM_TO_SL_UNITS;
 }
 
-SLVec3f SLLeapFinger::boneCenter(SLint boneType) const
+SLVec3f SLLeapFinger::boneCenter(SLFingerBone boneType) const
 {
     Leap::Bone::Type type = static_cast<Leap::Bone::Type>(boneType);
     Leap::Vector pos = _finger.bone(type).center();
@@ -51,7 +51,7 @@ SLVec3f SLLeapFinger::boneCenter(SLint boneType) const
     return SLVec3f(pos.x, pos.y, pos.z) * LM_TO_SL_UNITS;
 }
 
-SLVec3f SLLeapFinger::boneDirection(SLint boneType) const
+SLVec3f SLLeapFinger::boneDirection(SLFingerBone boneType) const
 {
     Leap::Bone::Type type = static_cast<Leap::Bone::Type>(boneType);
     Leap::Vector dir = _finger.bone(type).direction();
@@ -59,7 +59,7 @@ SLVec3f SLLeapFinger::boneDirection(SLint boneType) const
     return SLVec3f(dir.x, dir.y, dir.z);
 }
 
-SLQuat4f SLLeapFinger::boneRotation(SLint boneType) const
+SLQuat4f SLLeapFinger::boneRotation(SLFingerBone boneType) const
 {    
     Leap::Bone::Type type = static_cast<Leap::Bone::Type>(boneType);
     Leap::Vector bX = _finger.bone(type).basis().xBasis;

@@ -168,9 +168,10 @@ protected:
                 
                 // set bone positions
                 for (SLint k = 0; k < 4; ++k) {                    
+                    SLFingerBone fb = (SLFingerBone)k;
                     SLNode* bone = (hands[i].isLeft()) ? leftBones[j][k] : rightBones[j][k];
-                    bone->position(hands[i].fingers()[j].boneCenter(k) + _position* 0.04f);
-                    bone->rotation(hands[i].fingers()[j].boneRotation(k) * _orientation, TS_Parent);
+                    bone->position(hands[i].fingers()[j].boneCenter(fb) + _position* 0.04f);
+                    bone->rotation(hands[i].fingers()[j].boneRotation(fb) * _orientation, TS_World);
                 }
             }
         }
@@ -268,13 +269,13 @@ public:
     void setOrientation(SLQuat4f& orient) { _orientation = orient; }
 
     // @todo provide enums for finger type and bone type
-    void setLFingerJoint(SLint fingerType, SLint boneType, const SLstring& name)
+    void setLFingerJoint(SLFingerType fingerType, SLFingerBone boneType, const SLstring& name)
     {
         if (!_skeleton) return;
 
         _leftFingers[fingerType][boneType] = _skeleton->getJoint(name);
     }
-    void setRFingerJoint(SLint fingerType, SLint boneType, const SLstring& name)
+    void setRFingerJoint(SLFingerType fingerType, SLFingerBone boneType, const SLstring& name)
     {
         if (!_skeleton) return;
 
@@ -312,7 +313,7 @@ protected:
                     if (bone == NULL)
                         continue;
 
-                    bone->rotation(hands[i].fingers()[j].boneRotation(k) * _orientation, TS_World);
+                    bone->rotation(hands[i].fingers()[j].boneRotation((SLFingerBone)k) * _orientation, TS_World);
                 }
             }
         }

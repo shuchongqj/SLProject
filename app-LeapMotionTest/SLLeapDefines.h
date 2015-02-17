@@ -17,4 +17,25 @@
 ///         set the default to cm or mm.
 #define LM_TO_SL_UNITS 0.001f;  // convert's lm units (millimeters) to SLunits (currently meters)
 
+
+//-----------------------------------------------------------------------------
+//! Finger types
+enum SLFingerType
+{
+    FT_Thumb,
+    FT_Index,
+    FT_Middle,
+    FT_Ring,
+    FT_Pinky
+};
+//-----------------------------------------------------------------------------
+//! Finger bone types
+enum SLFingerBone
+{
+    FB_Metacarpal = 0,   // bone connected to the wrist inside the palm
+    FB_Proximal = 1,     // bone connecting to the palm
+    FB_Intermediate = 2, // bone between the tip and the base
+    FB_Distal = 3,       // bone at the tip of the finger
+};
+
 #endif
