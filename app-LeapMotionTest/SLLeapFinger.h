@@ -13,6 +13,7 @@
 
 #include <stdafx.h>
 #include <Leap.h>
+#include <SLLeapDefines.h>
 
 class SLLeapHand;
 
@@ -21,7 +22,7 @@ class SLLeapHand;
 class SLLeapFinger
 {
 public:
-                SLLeapFinger    (Leap::Finger::Type type);
+                SLLeapFinger    (SLFingerType type);
     
     void        leapHand        (const Leap::Hand& hand);
     
@@ -31,15 +32,16 @@ public:
 
     SLVec3f     tipPosition     () const;
     SLVec3f     jointPosition   (SLint joint) const;
-    SLVec3f     boneCenter      (SLint boneType) const;
-    SLVec3f     boneDirection   (SLint boneType) const;
-    SLQuat4f    boneRotation    (SLint boneType) const;
+    SLVec3f     boneCenter      (SLFingerBone boneType) const;
+    SLVec3f     boneDirection   (SLFingerBone boneType) const;
+    SLQuat4f    boneRotation    (SLFingerBone boneType) const;
+
+    SLFingerType fingerType     () const;
 
 protected:
     Leap::Hand          _hand;          //!< leap hand object
     Leap::Finger        _finger;        //!< leap finger object
-    /// @todo provide own finger enum!
-    Leap::Finger::Type  _fingerType;    //!< leap finger type 
+    SLFingerType        _fingerType;    //!< leap finger type 
 };
 
 typedef vector<SLLeapFinger> SLVLeapFinger;

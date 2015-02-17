@@ -752,20 +752,21 @@ void SLNode::rotation(const SLQuat4f& rot,
     
     if (_parent && relativeTo == TS_World)
     {
-        // get the inverse parent rotation to remove it from our current rotation
-        // we want the input quaternion to absolutely set our new rotation relative 
-        // to the world axes
-        /// @todo   this implementation works well most of the time, however. If the parent
-        ///         node also has scaling then that scaling will be removed forever (the om
-        ///         will forever keep the inverse of the parent's wm and thus completely removing 
-        ///         it. We need to only remove the paren'ts rotation however and set the inverse
-        ///         rotation to our current om.
-        ///         Also, we need to retain the local scaling of THIS node too. We'll probably need
-        ///         to decompose the matrices... This is a good example why working with rot trans scale
-        ///         rather than matrices is easier.
-        SLMat4f parentRotInv = _parent->updateAndGetWMI();
-        parentRotInv.translation(0, 0, 0);
-        
+        // @note    We're using SLMat4 to store our transformations in SLNode.
+        //          This results in us not being able to do some stuff easily.
+        //          In this instance it is reversing the parent's rotation
+        //          without including the parent's scaling factor. If we stored
+        //          the transforamtion information as (translation, rotation, scale)
+        //          we'd already have the needed parent orientation here.
+        SLMat4f parentWM = _parent->updateAndGetWM();
+        SLVec3f parentTrans;
+        SLQuat4f parentRot;
+        SLVec3f parentScale;
+        parentWM.decompose(parentTrans, (SLVec4f&)parentRot, parentScale);
+
+        parentRot.invert();
+        SLMat4f parentRotInv = parentRot.toMat4();
+                
         // set the om rotation to the inverse of the parents rotation to achieve a
         // 0, 0, 0 relative rotation in world space
         _om.rotation(0, 0, 0, 0);

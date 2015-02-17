@@ -511,58 +511,58 @@ void CustomSceneView::postSceneLoad()
     _riggedListener.setRWrist("R_Wrist");
     
     // bind the thumb joints to the correct leap bones
-    _riggedListener.setRFingerJoint(0, 1, "R_ThumbA");
-    _riggedListener.setRFingerJoint(0, 2, "R_ThumbB");
-    _riggedListener.setRFingerJoint(0, 3, "R_ThumbC");
+    _riggedListener.setRFingerJoint(FT_Thumb, FB_Proximal, "R_ThumbA");
+    _riggedListener.setRFingerJoint(FT_Thumb, FB_Intermediate, "R_ThumbB");
+    _riggedListener.setRFingerJoint(FT_Thumb, FB_Distal, "R_ThumbC");
     
     // bind the index finger joints to the correct leap bones
-    _riggedListener.setRFingerJoint(1, 0, "R_IndexA");
-    _riggedListener.setRFingerJoint(1, 1, "R_IndexB");
-    _riggedListener.setRFingerJoint(1, 2, "R_IndexC");
-    _riggedListener.setRFingerJoint(1, 3, "R_IndexD");
+    _riggedListener.setRFingerJoint(FT_Index, FB_Metacarpal, "R_IndexA");
+    _riggedListener.setRFingerJoint(FT_Index, FB_Proximal, "R_IndexB");
+    _riggedListener.setRFingerJoint(FT_Index, FB_Intermediate, "R_IndexC");
+    _riggedListener.setRFingerJoint(FT_Index, FB_Distal, "R_IndexD");
     
     // bind the middle finger joints to the correct leap bones
-    _riggedListener.setRFingerJoint(2, 0, "R_MiddleA");
-    _riggedListener.setRFingerJoint(2, 1, "R_MiddleB");
-    _riggedListener.setRFingerJoint(2, 2, "R_MiddleC");
-    _riggedListener.setRFingerJoint(2, 3, "R_MiddleD");
+    _riggedListener.setRFingerJoint(FT_Middle, FB_Metacarpal, "R_MiddleA");
+    _riggedListener.setRFingerJoint(FT_Middle, FB_Proximal, "R_MiddleB");
+    _riggedListener.setRFingerJoint(FT_Middle, FB_Intermediate, "R_MiddleC");
+    _riggedListener.setRFingerJoint(FT_Middle, FB_Distal, "R_MiddleD");
     
     // bind the ring finger joints to the correct leap bones
-    _riggedListener.setRFingerJoint(3, 0, "R_RingA");
-    _riggedListener.setRFingerJoint(3, 1, "R_RingB");
-    _riggedListener.setRFingerJoint(3, 2, "R_RingC");
-    _riggedListener.setRFingerJoint(3, 3, "R_RingD");
+    _riggedListener.setRFingerJoint(FT_Ring, FB_Metacarpal, "R_RingA");
+    _riggedListener.setRFingerJoint(FT_Ring, FB_Proximal, "R_RingB");
+    _riggedListener.setRFingerJoint(FT_Ring, FB_Intermediate, "R_RingC");
+    _riggedListener.setRFingerJoint(FT_Ring, FB_Distal, "R_RingD");
     
     // bind the pinky joints to the correct leap bones
-    _riggedListener.setRFingerJoint(4, 0, "R_PinkyA");
-    _riggedListener.setRFingerJoint(4, 1, "R_PinkyB");
-    _riggedListener.setRFingerJoint(4, 2, "R_PinkyC");
-    _riggedListener.setRFingerJoint(4, 3, "R_PinkyD");
+    _riggedListener.setRFingerJoint(FT_Pinky, FB_Metacarpal, "R_PinkyA");
+    _riggedListener.setRFingerJoint(FT_Pinky, FB_Proximal, "R_PinkyB");
+    _riggedListener.setRFingerJoint(FT_Pinky, FB_Intermediate, "R_PinkyC");
+    _riggedListener.setRFingerJoint(FT_Pinky, FB_Distal, "R_PinkyD");
     
     // same as above for the LEFT hand
-    _riggedListener.setLFingerJoint(0, 1, "L_ThumbA");
-    _riggedListener.setLFingerJoint(0, 2, "L_ThumbB");
-    _riggedListener.setLFingerJoint(0, 3, "L_ThumbC");
+    _riggedListener.setLFingerJoint(FT_Thumb, FB_Proximal, "L_ThumbA");
+    _riggedListener.setLFingerJoint(FT_Thumb, FB_Intermediate, "L_ThumbB");
+    _riggedListener.setLFingerJoint(FT_Thumb, FB_Distal, "L_ThumbC");
     
-    _riggedListener.setLFingerJoint(1, 0, "L_IndexA");
-    _riggedListener.setLFingerJoint(1, 1, "L_IndexB");
-    _riggedListener.setLFingerJoint(1, 2, "L_IndexC");
-    _riggedListener.setLFingerJoint(1, 3, "L_IndexD");
+    _riggedListener.setLFingerJoint(FT_Index, FB_Metacarpal, "L_IndexA");
+    _riggedListener.setLFingerJoint(FT_Index, FB_Proximal, "L_IndexB");
+    _riggedListener.setLFingerJoint(FT_Index, FB_Intermediate, "L_IndexC");
+    _riggedListener.setLFingerJoint(FT_Index, FB_Distal, "L_IndexD");
     
-    _riggedListener.setLFingerJoint(2, 0, "L_MiddleA");
-    _riggedListener.setLFingerJoint(2, 1, "L_MiddleB");
-    _riggedListener.setLFingerJoint(2, 2, "L_MiddleC");
-    _riggedListener.setLFingerJoint(2, 3, "L_MiddleD");
+    _riggedListener.setLFingerJoint(FT_Middle, FB_Metacarpal, "L_MiddleA");
+    _riggedListener.setLFingerJoint(FT_Middle, FB_Proximal, "L_MiddleB");
+    _riggedListener.setLFingerJoint(FT_Middle, FB_Intermediate, "L_MiddleC");
+    _riggedListener.setLFingerJoint(FT_Middle, FB_Distal, "L_MiddleD");
     
-    _riggedListener.setLFingerJoint(3, 0, "L_RingA");
-    _riggedListener.setLFingerJoint(3, 1, "L_RingB");
-    _riggedListener.setLFingerJoint(3, 2, "L_RingC");
-    _riggedListener.setLFingerJoint(3, 3, "L_RingD");
+    _riggedListener.setLFingerJoint(FT_Ring, FB_Metacarpal, "L_RingA");
+    _riggedListener.setLFingerJoint(FT_Ring, FB_Proximal, "L_RingB");
+    _riggedListener.setLFingerJoint(FT_Ring, FB_Intermediate, "L_RingC");
+    _riggedListener.setLFingerJoint(FT_Ring, FB_Distal, "L_RingD");
     
-    _riggedListener.setLFingerJoint(4, 0, "L_PinkyA");
-    _riggedListener.setLFingerJoint(4, 1, "L_PinkyB");
-    _riggedListener.setLFingerJoint(4, 2, "L_PinkyC");
-    _riggedListener.setLFingerJoint(4, 3, "L_PinkyD");
+    _riggedListener.setLFingerJoint(FT_Pinky, FB_Metacarpal, "L_PinkyA");
+    _riggedListener.setLFingerJoint(FT_Pinky, FB_Proximal, "L_PinkyB");
+    _riggedListener.setLFingerJoint(FT_Pinky, FB_Intermediate, "L_PinkyC");
+    _riggedListener.setLFingerJoint(FT_Pinky, FB_Distal, "L_PinkyD");
 
     /* OLD ASTROBOY BIND, NEEDS TO BE REDONE
     _riggedListener.setLWrist("L_wrist");
