@@ -13,7 +13,15 @@
 #include <debug_new.h>        // memory leak detector
 #endif
 
+#define GLFW_EXPOSE_NATIVE_WIN32
+#define GLFW_EXPOSE_NATIVE_WGL
+
 #include <GLFW/glfw3.h>
+
+// needed for oculus support
+#include  <GLFW/glfw3native.h>
+
+
 #include <SLInterface.h>
 #include <SLSceneView.h>
 #include <SLEnums.h>
@@ -385,6 +393,7 @@ int main(int argc, char *argv[])
     SLVstring* cmdLineArgs = new SLVstring();
     for(int i = 1; i < argc; i++)
 	    cmdLineArgs->push_back(argv[i]);
+    
 
     if (!glfwInit())
     {   fprintf(stderr, "Failed to initialize GLFW\n");
@@ -403,8 +412,8 @@ int main(int argc, char *argv[])
     //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    scrWidth = 640;
-    scrHeight = 480;
+    scrWidth = 1280;
+    scrHeight = 720;
     touch2.set(-1,-1);
     touchDelta.set(-1,-1);
 
@@ -456,7 +465,7 @@ int main(int argc, char *argv[])
     int dpi = (int)(142 * scr2fbX);
     cout << "GUI Library     : GLFW" << endl;
     cout << "DPI Resolution  : " << dpi << endl;
-
+    
     slCreateScene("../lib-SLProject/source/oglsl/",
                   "../_data/models/",
                   "../_data/images/textures/");
@@ -480,6 +489,10 @@ int main(int argc, char *argv[])
     glfwSetScrollCallback(window, onMouseWheel);
     glfwSetWindowCloseCallback(window, onClose);
 
+
+    
+
+    
     // Event loop
     while (!slShouldClose())
     {

@@ -192,6 +192,7 @@ enum SLCamAnim
     turntableYUp = 0,
     turntableZUp,
     walkingYUp,
+    flyingYUp,
     walkingZUp
 };
 
