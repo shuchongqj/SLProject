@@ -13,6 +13,10 @@
 #include "SLLeapFinger.h"
 #include <SLLeapDefines.h>
 
+const SLuint SLLeapFinger::numBones = 4;
+const SLuint SLLeapFinger::numJoints = 5;
+
+
 SLLeapFinger::SLLeapFinger(SLFingerType type)
     : _fingerType(type)
 { }
@@ -33,7 +37,7 @@ SLVec3f SLLeapFinger::tipPosition() const
 
 SLVec3f SLLeapFinger::jointPosition(SLint joint) const
 {
-    if (joint >= numBones())
+    if (joint >= numBones)
         return tipPosition();
 
     

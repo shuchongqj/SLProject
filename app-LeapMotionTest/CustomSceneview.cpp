@@ -16,201 +16,6 @@
 
 using namespace Leap; // dont use using!
 
-void drawXZGrid(const SLMat4f& mat)
-{
-    // for now we don't want to update the mesh implementation
-    // or the buffer implementation, so we don't have vertex color support
-    static bool         initialized = false;
-    static SLGLBuffer   grid;
-    static SLint        indexX;
-    static SLint        indexZ;
-    static SLint        indexGrid;
-    static SLint        numXVerts;
-    static SLint        numZVerts;
-    static SLint        numGridVerts;
-
-    if (!initialized)
-    {
-        vector<SLVec3f>  gridVert;
-
-        SLint gridLineNum = 21;
-        gridLineNum += gridLineNum%2 - 1; // make sure grid is odd
-        SLint gridHalf = gridLineNum / 2;
-        SLfloat gridSize = 1;
-        SLfloat gridMax = (SLfloat)gridHalf/(gridLineNum-1) * gridSize;
-        SLfloat gridMin = -gridMax;
-
-        
-        // x
-        gridVert.push_back(SLVec3f(gridMin, 0, 0));
-        gridVert.push_back(SLVec3f(gridMax, 0, 0));
-        // z
-        gridVert.push_back(SLVec3f(0, 0, gridMin));
-        gridVert.push_back(SLVec3f(0, 0, gridMax));
-
-        indexX = 0;
-        indexZ = 2;
-        indexGrid = 4;
-        numXVerts = 2;
-        numZVerts = 2;
-        numGridVerts = (gridLineNum-1)*4;
-
-        for (int i = 0; i < gridLineNum; ++i) 
-        {
-            SLfloat offset = (SLfloat)(i - gridHalf);
-            offset /= (SLfloat)(gridLineNum-1);
-            offset *= gridSize;
-            
-            // we're at the center
-            if (offset != 0) 
-            {
-                // horizontal lines
-                gridVert.push_back(SLVec3f(gridMin, 0, offset));
-                gridVert.push_back(SLVec3f(gridMax, 0, offset));
-                // vertical lines
-                gridVert.push_back(SLVec3f(offset, 0, gridMin));
-                gridVert.push_back(SLVec3f(offset, 0, gridMax));
-            }
-        }
-
-        grid.generate(&gridVert[0], gridVert.size(), 3);
-
-        initialized = true;
-    }
-
-    
-    SLGLState* state = SLGLState::getInstance();
-    state->pushModelViewMatrix();
-    state->modelViewMatrix = mat;
-
-    grid.drawArrayAsConstantColorLines(SLCol3f::RED,   1.0f, indexX, numXVerts);
-    grid.drawArrayAsConstantColorLines(SLCol3f::BLUE, 1.0f, indexZ, numZVerts);
-    grid.drawArrayAsConstantColorLines(SLCol3f(0.45f, 0.45f, 0.45f),  0.8f, indexGrid, numGridVerts);
-    
-    state->popModelViewMatrix();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void SampleListener::onInit(const Controller& controller) {
-  std::cout << "Initialized" << std::endl;
-}
-
-void SampleListener::onConnect(const Controller& controller) {
-  std::cout << "Connected" << std::endl;
-  controller.enableGesture(Gesture::TYPE_CIRCLE);
-  controller.enableGesture(Gesture::TYPE_KEY_TAP);
-  controller.enableGesture(Gesture::TYPE_SCREEN_TAP);
-  controller.enableGesture(Gesture::TYPE_SWIPE);
-}
-
-void SampleListener::onDisconnect(const Controller& controller) {
-  // Note: not dispatched when running in a debugger.
-  std::cout << "Disconnected" << std::endl;
-}
-
-void SampleListener::onExit(const Controller& controller) {
-  std::cout << "Exited" << std::endl;
-}
-
-void SampleListener::onFrame(const Controller& controller) {
-    // Get the most recent frame and report some basic information
-    const Frame frame = controller.frame();
-
-
-    HandList hands = frame.hands();
-    for (HandList::const_iterator hl = hands.begin(); hl != hands.end(); ++hl) {
-        // Get the first hand
-        const Hand hand = *hl;
-        SLint index = 0;
-        std::string handType = hand.isLeft() ? "Left hand" : "Right hand";
-        Vector pos = hand.palmPosition();
-        SLVec3f slPos(pos.x, pos.y, pos.z);
-        if (hand.isLeft())
-            positionsLeft[index++] = slPos;
-        else
-            positionsRight[index++] = slPos;
-        
-
-        
-    
-        FingerList fingers = hand.fingers();
-        for(Leap::FingerList::const_iterator fl = fingers.begin(); fl != fingers.end(); fl++) {
-            Bone bone;
-            Bone::Type boneType;
-            for (int b = 0; b < 4; ++b) {
-                boneType = static_cast<Bone::Type>(b);
-                bone = (*fl).bone(boneType);
-
-                SLVec3f prevPos(bone.prevJoint().x, bone.prevJoint().y, bone.prevJoint().z);
-                SLVec3f nextPos(bone.nextJoint().x, bone.nextJoint().y, bone.nextJoint().z);
-
-                if (hand.isLeft()) {
-                    positionsLeft[index++] = prevPos;
-                    if (boneType == Bone::Type::TYPE_DISTAL)
-                        positionsLeft[index++] = nextPos;
-                }
-                else {
-                    positionsRight[index++] = prevPos;
-                    if (boneType == Bone::Type::TYPE_DISTAL)
-                        positionsRight[index++] = nextPos;
-                }
-            }
-        }
-    }
-}
-
-void SampleListener::onFocusGained(const Controller& controller) {
-  std::cout << "Focus Gained" << std::endl;
-}
-
-void SampleListener::onFocusLost(const Controller& controller) {
-  std::cout << "Focus Lost" << std::endl;
-}
-
-void SampleListener::onDeviceChange(const Controller& controller) {
-  std::cout << "Device Changed" << std::endl;
-  const DeviceList devices = controller.devices();
-
-  for (int i = 0; i < devices.count(); ++i) {
-    std::cout << "id: " << devices[i].toString() << std::endl;
-    std::cout << "  isStreaming: " << (devices[i].isStreaming() ? "true" : "false") << std::endl;
-  }
-}
-
-void SampleListener::onServiceConnect(const Controller& controller) {
-  std::cout << "Service Connected" << std::endl;
-}
-
-void SampleListener::onServiceDisconnect(const Controller& controller) {
-  std::cout << "Service Disconnected" << std::endl;
-}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -222,63 +27,6 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd cmd)
 {
     init();
 
-    /*
-    name("LeapMotion Test Example");
-    info(sv, "LeapMotion Test Example");
-
-    
-    _backColor.set(0.1f,0.1f,0.1f);
-    
-    SLLightSphere* light1 = new SLLightSphere(0.1f);
-    light1->position(2, -4, 3);
-
-    SLLightSphere* light2 = new SLLightSphere(0.1f);
-    light2->ambient(SLCol4f(0.2f, 0.1f, 0.0f, 1.0f));
-    light2->diffuse(SLCol4f(2.0f, 0.9f, 0.5f, 1.0f));
-    light2->position(2, 1, -3);
-    
-    SLLightSphere* light3 = new SLLightSphere(0.1f);
-    light3->position(-5, 15, 10);
-
-    SLMaterial* mat = new SLMaterial("floorMat", SLCol4f::GRAY, SLCol4f::GRAY);
-
-    SLNode* scene = new SLNode;
-    scene->addChild(light1);
-    scene->addChild(light2);
-    scene->addChild(light3);
-    
-    
-    SLAssimpImporter importer("Importer.log");
-    //SLNode* meshDAE = importer.load("DAE/AstroBoy/AstroBoy.dae");
-    //scene->addChild(meshDAE);
-    importer.logFileVerbosity(LV_Detailed);
-    SLNode* meshDAE2 = importer.load("DAE/Hands/rigged_hands.dae");
-    scene->addChild(meshDAE2);
-    //meshDAE2->scale(12.5);
-    //meshDAE2->translate(0, 0, 5);
-
-    
-    for (SLint i = 0; i < importer.meshes().size(); ++i) {
-        //importer.meshes()[i]->skinningMethod(SM_HardwareSkinning);
-    }
-    
-
-
-    SLCamera* cam1 = new SLCamera;
-    cam1->position(-4, 3, 3);
-    cam1->lookAt(0, 0, 1);
-    cam1->focalDist(6);
-
-    scene->addChild(cam1);
-    
-    _root3D = scene;
-
-    sv->camera(cam1);
-
-    
-
-    /*/
-    
     name("Virtual Reality test scene");
     info(sv, "Test scene for virtual reality size perception.");
         
@@ -501,97 +249,90 @@ void CustomSceneView::postSceneLoad()
     // set the skeleton that this rigged listener should control
     // @todo allow for an easier way to search and find the desired skeleton via name strings
     _riggedListener.setSkeleton(SLScene::current->animManager().skeletons()[0]);
-    _riggedListener.setModelScale(66.6666666f); // this particular model is scaled down by 0.01 to fit real life units (meters) 
-    _riggedListener.setOrigin(SLVec3f(0, 1.1f, -0.6f));
-
-    //_riggedListener.setScaleCorrection(SLVec3f(10, 10, 10));
-
+    _riggedListener.setModelScale(66.6666666f); // the model has a scale factor applied to it. To get world units we need to know the reverse factor for it
+    _riggedListener.setOrigin(SLVec3f(0, 1.1f, -0.6f)); // origin of the model in world units 
+    
     // set the wrist joints
     _riggedListener.setLWrist("L_Wrist");
     _riggedListener.setRWrist("R_Wrist");
     
     // bind the thumb joints to the correct leap bones
-    _riggedListener.setRFingerJoint(FT_Thumb, FB_Proximal, "R_ThumbA");
-    _riggedListener.setRFingerJoint(FT_Thumb, FB_Intermediate, "R_ThumbB");
-    _riggedListener.setRFingerJoint(FT_Thumb, FB_Distal, "R_ThumbC");
+        // right
+        _riggedListener.setRFingerJoint(FT_Thumb, FB_Proximal, "R_ThumbA");
+        _riggedListener.setRFingerJoint(FT_Thumb, FB_Intermediate, "R_ThumbB");
+        _riggedListener.setRFingerJoint(FT_Thumb, FB_Distal, "R_ThumbC");
+        
+        //left
+        _riggedListener.setLFingerJoint(FT_Thumb, FB_Proximal, "L_ThumbA");
+        _riggedListener.setLFingerJoint(FT_Thumb, FB_Intermediate, "L_ThumbB");
+        _riggedListener.setLFingerJoint(FT_Thumb, FB_Distal, "L_ThumbC");
     
     // bind the index finger joints to the correct leap bones
-    _riggedListener.setRFingerJoint(FT_Index, FB_Metacarpal, "R_IndexA");
-    _riggedListener.setRFingerJoint(FT_Index, FB_Proximal, "R_IndexB");
-    _riggedListener.setRFingerJoint(FT_Index, FB_Intermediate, "R_IndexC");
-    _riggedListener.setRFingerJoint(FT_Index, FB_Distal, "R_IndexD");
+        // right
+        _riggedListener.setRFingerJoint(FT_Index, FB_Metacarpal, "R_IndexA");
+        _riggedListener.setRFingerJoint(FT_Index, FB_Proximal, "R_IndexB");
+        _riggedListener.setRFingerJoint(FT_Index, FB_Intermediate, "R_IndexC");
+        _riggedListener.setRFingerJoint(FT_Index, FB_Distal, "R_IndexD");
     
+        // left
+        _riggedListener.setLFingerJoint(FT_Index, FB_Metacarpal, "L_IndexA");
+        _riggedListener.setLFingerJoint(FT_Index, FB_Proximal, "L_IndexB");
+        _riggedListener.setLFingerJoint(FT_Index, FB_Intermediate, "L_IndexC");
+        _riggedListener.setLFingerJoint(FT_Index, FB_Distal, "L_IndexD");
+
     // bind the middle finger joints to the correct leap bones
-    _riggedListener.setRFingerJoint(FT_Middle, FB_Metacarpal, "R_MiddleA");
-    _riggedListener.setRFingerJoint(FT_Middle, FB_Proximal, "R_MiddleB");
-    _riggedListener.setRFingerJoint(FT_Middle, FB_Intermediate, "R_MiddleC");
-    _riggedListener.setRFingerJoint(FT_Middle, FB_Distal, "R_MiddleD");
+        // right
+        _riggedListener.setRFingerJoint(FT_Middle, FB_Metacarpal, "R_MiddleA");
+        _riggedListener.setRFingerJoint(FT_Middle, FB_Proximal, "R_MiddleB");
+        _riggedListener.setRFingerJoint(FT_Middle, FB_Intermediate, "R_MiddleC");
+        _riggedListener.setRFingerJoint(FT_Middle, FB_Distal, "R_MiddleD");
+
+        // left
+        _riggedListener.setLFingerJoint(FT_Middle, FB_Metacarpal, "L_MiddleA");
+        _riggedListener.setLFingerJoint(FT_Middle, FB_Proximal, "L_MiddleB");
+        _riggedListener.setLFingerJoint(FT_Middle, FB_Intermediate, "L_MiddleC");
+        _riggedListener.setLFingerJoint(FT_Middle, FB_Distal, "L_MiddleD");
     
     // bind the ring finger joints to the correct leap bones
-    _riggedListener.setRFingerJoint(FT_Ring, FB_Metacarpal, "R_RingA");
-    _riggedListener.setRFingerJoint(FT_Ring, FB_Proximal, "R_RingB");
-    _riggedListener.setRFingerJoint(FT_Ring, FB_Intermediate, "R_RingC");
-    _riggedListener.setRFingerJoint(FT_Ring, FB_Distal, "R_RingD");
+        // right
+        _riggedListener.setRFingerJoint(FT_Ring, FB_Metacarpal, "R_RingA");
+        _riggedListener.setRFingerJoint(FT_Ring, FB_Proximal, "R_RingB");
+        _riggedListener.setRFingerJoint(FT_Ring, FB_Intermediate, "R_RingC");
+        _riggedListener.setRFingerJoint(FT_Ring, FB_Distal, "R_RingD");
+
+        // left
+        _riggedListener.setLFingerJoint(FT_Ring, FB_Metacarpal, "L_RingA");
+        _riggedListener.setLFingerJoint(FT_Ring, FB_Proximal, "L_RingB");
+        _riggedListener.setLFingerJoint(FT_Ring, FB_Intermediate, "L_RingC");
+        _riggedListener.setLFingerJoint(FT_Ring, FB_Distal, "L_RingD");
     
     // bind the pinky joints to the correct leap bones
-    _riggedListener.setRFingerJoint(FT_Pinky, FB_Metacarpal, "R_PinkyA");
-    _riggedListener.setRFingerJoint(FT_Pinky, FB_Proximal, "R_PinkyB");
-    _riggedListener.setRFingerJoint(FT_Pinky, FB_Intermediate, "R_PinkyC");
-    _riggedListener.setRFingerJoint(FT_Pinky, FB_Distal, "R_PinkyD");
-    
-    // same as above for the LEFT hand
-    _riggedListener.setLFingerJoint(FT_Thumb, FB_Proximal, "L_ThumbA");
-    _riggedListener.setLFingerJoint(FT_Thumb, FB_Intermediate, "L_ThumbB");
-    _riggedListener.setLFingerJoint(FT_Thumb, FB_Distal, "L_ThumbC");
-    
-    _riggedListener.setLFingerJoint(FT_Index, FB_Metacarpal, "L_IndexA");
-    _riggedListener.setLFingerJoint(FT_Index, FB_Proximal, "L_IndexB");
-    _riggedListener.setLFingerJoint(FT_Index, FB_Intermediate, "L_IndexC");
-    _riggedListener.setLFingerJoint(FT_Index, FB_Distal, "L_IndexD");
-    
-    _riggedListener.setLFingerJoint(FT_Middle, FB_Metacarpal, "L_MiddleA");
-    _riggedListener.setLFingerJoint(FT_Middle, FB_Proximal, "L_MiddleB");
-    _riggedListener.setLFingerJoint(FT_Middle, FB_Intermediate, "L_MiddleC");
-    _riggedListener.setLFingerJoint(FT_Middle, FB_Distal, "L_MiddleD");
-    
-    _riggedListener.setLFingerJoint(FT_Ring, FB_Metacarpal, "L_RingA");
-    _riggedListener.setLFingerJoint(FT_Ring, FB_Proximal, "L_RingB");
-    _riggedListener.setLFingerJoint(FT_Ring, FB_Intermediate, "L_RingC");
-    _riggedListener.setLFingerJoint(FT_Ring, FB_Distal, "L_RingD");
-    
-    _riggedListener.setLFingerJoint(FT_Pinky, FB_Metacarpal, "L_PinkyA");
-    _riggedListener.setLFingerJoint(FT_Pinky, FB_Proximal, "L_PinkyB");
-    _riggedListener.setLFingerJoint(FT_Pinky, FB_Intermediate, "L_PinkyC");
-    _riggedListener.setLFingerJoint(FT_Pinky, FB_Distal, "L_PinkyD");
+        // right
+        _riggedListener.setRFingerJoint(FT_Pinky, FB_Metacarpal, "R_PinkyA");
+        _riggedListener.setRFingerJoint(FT_Pinky, FB_Proximal, "R_PinkyB");
+        _riggedListener.setRFingerJoint(FT_Pinky, FB_Intermediate, "R_PinkyC");
+        _riggedListener.setRFingerJoint(FT_Pinky, FB_Distal, "R_PinkyD");
 
-    /* OLD ASTROBOY BIND, NEEDS TO BE REDONE
-    _riggedListener.setLWrist("L_wrist");
-    _riggedListener.setRWrist("R_wrist");
-    // thumb
-    //_riggedListener.setLFingerJoint(0, 1, "L_thumbOrient");
-    _riggedListener.setLFingerJoint(0, 1, "L_thumb_01");
-    _riggedListener.setLFingerJoint(0, 3, "L_thumb_02");
-    _riggedListener.setRFingerJoint(0, 1, "R_thumb_01");
-    _riggedListener.setRFingerJoint(0, 3, "R_thumb_02");
-    // index
-    _riggedListener.setLFingerJoint(1, 1, "L_index_01");
-    _riggedListener.setLFingerJoint(1, 2, "L_index_02");
-    _riggedListener.setRFingerJoint(1, 1, "R_index_01");
-    _riggedListener.setRFingerJoint(1, 2, "R_index_02");
-    // middle
-    _riggedListener.setLFingerJoint(2, 1, "L_middle_01");
-    _riggedListener.setLFingerJoint(2, 2, "L_middle_02");
-    _riggedListener.setRFingerJoint(2, 1, "R_middle_01");
-    _riggedListener.setRFingerJoint(2, 2, "R_middle_01");
-    // pinky
-    _riggedListener.setLFingerJoint(4, 1, "L_pinky_01");
-    _riggedListener.setLFingerJoint(4, 2, "L_pinky_02");
-    _riggedListener.setRFingerJoint(4, 1, "R_pinky_01");
-    _riggedListener.setRFingerJoint(4, 2, "R_pinky_02");
-    */
+        // left
+        _riggedListener.setLFingerJoint(FT_Pinky, FB_Metacarpal, "L_PinkyA");
+        _riggedListener.setLFingerJoint(FT_Pinky, FB_Proximal, "L_PinkyB");
+        _riggedListener.setLFingerJoint(FT_Pinky, FB_Intermediate, "L_PinkyC");
+        _riggedListener.setLFingerJoint(FT_Pinky, FB_Distal, "L_PinkyD");
+    
+    
+    // set bones for the pinch detection on the skeleton
+    // @note    the R_IndexEND and L_IndexEND bones seem to be messed up
+    //          that is why we use the last index bone and add an offset of
+    //          1.5f to get the meshes finger tip for that finger.
+    _riggedListener.setIndexPinchOffset(SLVec3f(0, 0, 1.5f)); 
+
+    _riggedListener.setRIndexPinchBone("R_IndexD");
+    _riggedListener.setRThumbPinchBone("R_ThumbEND");
+    _riggedListener.setLIndexPinchBone("L_IndexD");
+    _riggedListener.setLThumbPinchBone("L_ThumbEND");
 
 
-    // cubes to grab and interact with
+    // Build interactive cube scenes for the big hands to move
     _currentGrabbedObject[0] = NULL;
     _currentGrabbedObject[1] = NULL;
 
@@ -618,38 +359,11 @@ void CustomSceneView::postSceneLoad()
         }
     }
 
-    
+    // connect the make shift object mover callbacks
     _objectMover.setGrabCallback(std::bind(&CustomSceneView::grabCallback,this,placeholders::_1,placeholders::_2,placeholders::_3));
     _objectMover.setReleaseCallback(std::bind(&CustomSceneView::releaseCallback,this,placeholders::_1));
     _objectMover.setMoveCallback(std::bind(&CustomSceneView::moveCallback,this,placeholders::_1,placeholders::_2,placeholders::_3));
 }
-
-void CustomSceneView::preDraw()
-{
-    
-}
-
-
-void CustomSceneView::postDraw()
-{/*
-    // hacked in world grid with x, z axes marked by color
-    SLMat4f orig(0.0f, 1.11f, -1.0f); // move origin on the table
-    drawXZGrid(_camera->updateAndGetVM() * orig);*/
-}
-
-
-// some basic manipulation for now
-SLbool CustomSceneView::onKeyPress(const SLKey key, const SLKey mod)
-{
-    return SLSceneView::onKeyPress(key, mod);
-}
-
-SLbool CustomSceneView::onKeyRelease(const SLKey key, const SLKey mod)
-{
-    return SLSceneView::onKeyRelease(key, mod);
-}
-
-
 
 void CustomSceneView::grabCallback(SLVec3f& pos, SLQuat4f& rot, bool isLeft)
 {
