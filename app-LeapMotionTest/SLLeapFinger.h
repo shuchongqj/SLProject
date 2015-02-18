@@ -22,13 +22,12 @@ class SLLeapHand;
 class SLLeapFinger
 {
 public:
+    static const SLuint numBones;
+    static const SLuint numJoints;
+
                 SLLeapFinger    (SLFingerType type);
     
     void        leapHand        (const Leap::Hand& hand);
-    
-    /// @todo define number of bones and joints as constants somewhere
-    SLint       numBones        () const { return 4; }
-    SLint       numJoints       () const { return 5; }
 
     SLVec3f     tipPosition     () const;
     SLVec3f     jointPosition   (SLint joint) const;
@@ -39,9 +38,9 @@ public:
     SLFingerType fingerType     () const;
 
 protected:
-    Leap::Hand          _hand;          //!< leap hand object
-    Leap::Finger        _finger;        //!< leap finger object
-    SLFingerType        _fingerType;    //!< leap finger type 
+    Leap::Hand      _hand;          //!< leap hand object
+    Leap::Finger    _finger;        //!< leap finger object
+    SLFingerType    _fingerType;    //!< leap finger type 
 };
 
 typedef vector<SLLeapFinger> SLVLeapFinger;

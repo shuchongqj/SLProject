@@ -18,17 +18,10 @@ public:
     { }
     ~CustomSceneView();
 
-    void                preDraw();
-    void                postDraw();
-                        
     void                postSceneLoad();
     
-    SLbool              onKeyPress(const SLKey key, const SLKey mod);
-    SLbool              onKeyRelease(const SLKey key, const SLKey mod);
-
-
 private:
-    SLLeapController            _leapController;
+    SLLeapController            _leapController;            
     SampleHandListener          _slHandListener;
     SLRiggedLeapHandListener    _riggedListener;
     SampleToolListener          _slToolListener;

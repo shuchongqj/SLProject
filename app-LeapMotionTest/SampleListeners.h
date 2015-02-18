@@ -1,6 +1,14 @@
 
 #pragma once
 
+/**
+
+This file contains a few example implementations for the provided SLLeap listener interfaces.
+Some of these should be provided as finished listeners should this be added to the core library.
+
+*/
+
+
 // first test, direct implementation of Leap::Listener
 class SampleListener : public Leap::Listener {
   public:
@@ -14,12 +22,6 @@ class SampleListener : public Leap::Listener {
     virtual void onDeviceChange(const Leap::Controller&);
     virtual void onServiceConnect(const Leap::Controller&);
     virtual void onServiceDisconnect(const Leap::Controller&);
-
-    SLVec3f posLeft;
-    SLVec3f posRight;
-
-    SLVec3f positionsLeft[26];
-    SLVec3f positionsRight[26];
 };
 
 // Simple hand listener, generates and moves spheres, boxes and cylinders as a 'skeletal' hand model
@@ -33,10 +35,10 @@ public:
         SLScene::current->root3D()->addChild(parent);
 
         
-        SLMesh* palmMesh = new SLBox(-0.015f, -0.005f, -0.015f, 0.015f, 0.005f, 0.015f);
         SLMesh* jointMesh = new SLSphere(0.005f);
-        SLMesh* jointMeshBig = new SLSphere(0.01f);
         SLMesh* boneMesh = new SLCylinder(0.0015f, 0.1f);
+        /*SLMesh* jointMeshBig = new SLSphere(0.01f);
+        SLMesh* palmMesh = new SLBox(-0.015f, -0.005f, -0.015f, 0.015f, 0.005f, 0.015f);
         
         leftHand = new SLNode(palmMesh, "fucking palm");
         rightHand = new SLNode(palmMesh);
@@ -57,11 +59,22 @@ public:
         leftElbow = new SLNode(jointMeshBig);
         rightElbow = new SLNode(jointMeshBig);
         
+        parent->addChild(leftHand);
+        parent->addChild(rightHand);
+        
+        parent->addChild(leftArm);
+        parent->addChild(rightArm);
+        parent->addChild(leftElbow);
+        parent->addChild(rightElbow);
+        parent->addChild(leftWrist);
+        parent->addChild(rightWrist);
+        */
+
         // generate joints and bones for fingers
         SLfloat boneScales[5][4] = { 
-            { 0.01f, 0.36f, 0.3f, 0.15f},  // thumb
+            { 0.01f, 0.36f, 0.3f, 0.15f}, // thumb
             { 0.6f, 0.36f, 0.3f, 0.12f},  // index
-            { 0.6f, 0.36f, 0.33f, 0.12f},  // middle
+            { 0.6f, 0.36f, 0.33f, 0.12f}, // middle
             { 0.5f, 0.36f, 0.3f, 0.12f},  // ring
             { 0.5f, 0.3f, 0.25f, 0.12f}   // pinky
         };
@@ -97,16 +110,6 @@ public:
         }
 
 
-        
-        parent->addChild(leftHand);
-        parent->addChild(rightHand);
-        
-        parent->addChild(leftArm);
-        parent->addChild(rightArm);
-        parent->addChild(leftElbow);
-        parent->addChild(rightElbow);
-        parent->addChild(leftWrist);
-        parent->addChild(rightWrist);
         parent->needUpdate();
     }
 
@@ -155,7 +158,7 @@ protected:
             arm->position(hands[i].armCenter());
             arm->rotation(hands[i].armRotation(), TS_Parent);*/
 
-            // @todo the above code is commented out because we experiance lag spikes when this listener has to process two hands. very strange, not resolved.
+            // @note    the above code is commented out to not mess with the viewer in VR for now.
 
             for (SLint j = 0; j < hands[i].fingers().size(); ++j)
             {
@@ -218,7 +221,7 @@ class SampleGestureListener : public SLLeapGestureListener
 {
 protected:
     virtual void onLeapGesture(const SLLeapGesture& gesture)
-    {/*
+    {/* Just a small example for now, gestures aren't fully implemented tough.
         switch (gesture.type())
         {
         case SLLeapGesture::Swipe: SL_LOG("SWIPE\n") break;
@@ -234,12 +237,19 @@ class SLRiggedLeapHandListener : public SLLeapHandListener
 {
 public:
     SLRiggedLeapHandListener()
-        : _modelScale(1.0f)
+        : _modelScale(1.0f),
+        _thumbPinchOffset(0, 0, 0, 1),
+        _indexPinchOffset(0, 0, 0, 1)
     {
         for (SLint i = 0; i < 5; ++i) {
             for (SLint j = 0; j < 4; ++j) {
                 _leftFingers[i][j] = _rightFingers[i][j] = NULL;
             }
+        }
+
+        for (SLint i = 0; i < 2; ++i) {
+            _leftPinchPair[i] = NULL;
+            _rightPinchPair[i] = NULL;
         }
     }
 
@@ -263,6 +273,28 @@ public:
     {
 
     }
+
+    void setThumbPinchOffset(const SLVec3f& o) { _thumbPinchOffset.set(o.x, o.y, o.z, 1); }
+    void setIndexPinchOffset(const SLVec3f& o) { _indexPinchOffset.set(o.x, o.y, o.z, 1); }
+
+    // set a special bone to be used for pinch detection of the left thumb
+    void setLThumbPinchBone(const SLstring& name)
+    {
+        _leftPinchPair[0] = _skeleton->getJoint(name);
+    }
+    void setRThumbPinchBone(const SLstring& name)
+    {
+        _rightPinchPair[0] = _skeleton->getJoint(name);
+    }
+    void setLIndexPinchBone(const SLstring& name)
+    {
+        _leftPinchPair[1] = _skeleton->getJoint(name);
+    }
+    void setRIndexPinchBone(const SLstring& name)
+    {
+        _rightPinchPair[1] = _skeleton->getJoint(name);
+    }
+
 
     void setModelScale(SLfloat s) { _modelScale = s; }
     void setOrigin(SLVec3f& orig) { _position = orig; }
@@ -296,6 +328,12 @@ protected:
     SLVec3f _position;  //!< origin position for the hands
     SLQuat4f _orientation; //!< origin orientation for the hands
 
+    // additional support for grab callbacks
+    SLVec4f _thumbPinchOffset;
+    SLVec4f _indexPinchOffset;
+    SLJoint* _leftPinchPair[2];
+    SLJoint* _rightPinchPair[2];
+
     virtual void onLeapHandChange(const vector<SLLeapHand>& hands)
     {
         for (SLint i = 0; i < hands.size(); ++i)
@@ -316,7 +354,72 @@ protected:
                     bone->rotation(hands[i].fingers()[j].boneRotation((SLFingerBone)k) * _orientation, TS_World);
                 }
             }
+
+            detectPinch(hands[i]);
         }
+    }
+
+    // just a first test, that's why we have statics here
+    void detectPinch(const SLLeapHand& hand) 
+    {
+        static SLfloat grabThreshold = 0.8f;
+        static SLbool grabbing[2] = {false, false};
+        static bool initialized = false;
+        static SLNode* pinchVisualization;
+        if (!initialized) {
+            initialized = true;
+
+            pinchVisualization = new SLNode(new SLSphere(0.02f));
+            pinchVisualization->drawBits()->on(SL_DB_HIDDEN);
+            SLScene::current->root3D()->addChild(pinchVisualization);
+        }
+       
+        SLJoint* thumb = hand.isLeft() ? _leftPinchPair[0] : _rightPinchPair[0];
+        SLJoint* indexFinger = hand.isLeft() ? _leftPinchPair[1] : _rightPinchPair[1];
+
+        // can't detect a pinchbased on the model we could use 
+        // the tip position from the leap, but for now we just return...
+        if (!thumb ||!indexFinger)
+            return;
+
+        SLVec3f grabPosition = hand.fingers()[0].tipPosition() + 
+                                hand.fingers()[1].tipPosition();
+
+        
+        SLVec4f temp = thumb->updateAndGetWM() * _thumbPinchOffset;
+        SLVec3f thumbPos = SLVec3f(temp.x, temp.y, temp.z);
+        temp = indexFinger->updateAndGetWM() * _indexPinchOffset;
+        SLVec3f indexPos = SLVec3f(temp.x, temp.y, temp.z);
+
+        grabPosition = thumbPos + indexPos;
+        grabPosition *= 0.5f;
+        grabPosition /= _modelScale;
+
+
+        int asd= 0;
+
+        //grabPosition /= _modelScale;
+        
+        
+        SLint index = hand.isLeft() ? 0 : 1;
+        SL_LOG("pinch: %f\n", hand.pinchStrength());
+        if (hand.pinchStrength() > grabThreshold) {
+            // display visualization of grab position
+            pinchVisualization->position(grabPosition, TS_World);
+
+            if (!grabbing[index]) {
+                grabbing[index]= true;
+                pinchVisualization->drawBits()->off(SL_DB_HIDDEN);
+            }
+        }
+        else {
+            if (grabbing[index]) {
+                SL_LOG("released pinch\n");
+                grabbing[index] = false;
+                pinchVisualization->drawBits()->on(SL_DB_HIDDEN);
+            }
+        }
+
     }
 };
 

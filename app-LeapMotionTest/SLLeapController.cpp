@@ -17,7 +17,6 @@
 /** Constructor */
 SLLeapController::SLLeapController()
 {
-    _leapController.addListener(*this);
     //_leapController.setPolicy(Leap::Controller::POLICY_BACKGROUND_FRAMES);
     _leapController.enableGesture(Leap::Gesture::TYPE_SWIPE);
     _leapController.enableGesture(Leap::Gesture::TYPE_KEY_TAP);
@@ -29,6 +28,7 @@ SLLeapController::~SLLeapController()
 {
 }
 
+/** Implementation of SLInputDevice::poll */
 SLbool SLLeapController::poll()
 {
     const Leap::Frame frame = _leapController.frame();
@@ -42,6 +42,7 @@ SLbool SLLeapController::poll()
     return false;
 }
 
+/** Main leap data processing function, calls the appropriate listeners if they exist. */
 void SLLeapController::onFrame(const Leap::Frame& frame)
 {
     if (_handListeners.size())

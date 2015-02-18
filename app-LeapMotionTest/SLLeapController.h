@@ -47,12 +47,12 @@ protected:
 };
 
 // @note    below is a good example of a smart ptr usecase
-typedef vector<SLLeapGestureListener*> SLVLeapGestureListenerPtr;
-typedef vector<SLLeapHandListener*> SLVLeapHandListenerPtr;
-typedef vector<SLLeapToolListener*> SLVLeapToolListenerPtr;
+typedef vector<SLLeapGestureListener*>  SLVLeapGestureListenerPtr;
+typedef vector<SLLeapHandListener*>     SLVLeapHandListenerPtr;
+typedef vector<SLLeapToolListener*>     SLVLeapToolListenerPtr;
 
 // leap controller input device
-class SLLeapController : public SLInputDevice, public Leap::Listener
+class SLLeapController : public SLInputDevice
 {
 public:
                     SLLeapController();
@@ -68,24 +68,18 @@ public:
     
     // SLInputDevice function implementation
     virtual SLbool poll();
-
-    virtual void onFrame(const Leap::Controller&)
-    {
-        SLint i = 0;
-    }
-    
+        
 protected:
-    int64_t                     _prevFrameId;
-    Leap::Controller            _leapController;
+    int64_t                     _prevFrameId;           //!< previous frame id to avoid unnecessary processing
+    Leap::Controller            _leapController;        //!< leap controller instance for data access
     
-    SLint                       _prevFrameHandCount;
-    SLint                       _prevFrameToolCount;
+    SLint                       _prevFrameHandCount;    //!< number of detected hands in previous frame
+    SLint                       _prevFrameToolCount;    //!< number of detected tools in previous frame
 
-    SLVLeapGestureListenerPtr   _gestureListeners;
-    SLVLeapHandListenerPtr      _handListeners;
-    SLVLeapToolListenerPtr      _toolListeners;
+    SLVLeapGestureListenerPtr   _gestureListeners;      //!< registered gesture listeners
+    SLVLeapHandListenerPtr      _handListeners;         //!< registered hand listeners
+    SLVLeapToolListenerPtr      _toolListeners;         //!< registered tool listeners
 
-    
     virtual void onFrame(const Leap::Frame&);
 };
 
