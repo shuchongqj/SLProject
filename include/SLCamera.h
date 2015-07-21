@@ -177,7 +177,7 @@ class SLCamera: public SLNode
             // Stereo rendering & VR
             SLfloat         _eyeHeight;             //!< height of the eyes, scales with the _unitScaling parameter
             SLfloat         _eyeSeparation;         //!< eye separation for stereo mode
-            SLfloat         _unitScaling            //!< default unit's are meters, change unit scaling to convert to other mesurements
+            SLfloat         _unitScaling;            //!< default unit's are meters, change unit scaling to convert to other mesurements
 };
 //-----------------------------------------------------------------------------
 #endif

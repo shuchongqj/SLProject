@@ -134,7 +134,7 @@ SLbool SLCamera::camUpdate(SLfloat elapsedTimeMS)
     delta *= _unitScaling;
 
     if (_camAnim == flyingYUp)
-        translate(delta, TS_Local);
+        translate(delta, TS_Object);
     else
     translate(delta, TS_World);
     
