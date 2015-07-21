@@ -91,7 +91,7 @@ public:
             // bones
             for (SLint j = 0; j < 4; ++j) {
                 SLNode* meshCont = new SLNode(boneMesh);
-                meshCont->position(0, 0, -0.5 * boneScales[i][j] * 0.1f);
+                meshCont->translation(0, 0, -0.5 * boneScales[i][j] * 0.1f);
                 meshCont->scale(1, 1, boneScales[i][j]);
                 
                 leftBones[i][j] = new SLNode;
@@ -100,7 +100,7 @@ public:
 
                 
                 meshCont = new SLNode(boneMesh);
-                meshCont->position(0, 0, -0.5 * boneScales[i][j] * 0.1f);
+                meshCont->translation(0, 0, -0.5 * boneScales[i][j] * 0.1f);
                 meshCont->scale(1, 1, boneScales[i][j]);
                 
                 rightBones[i][j] = new SLNode;
@@ -166,14 +166,14 @@ protected:
                 
                 for (SLint k = 0; k < 5; ++k) {
                     SLNode* joint = (hands[i].isLeft()) ? leftJoints[j][k] : rightJoints[j][k];
-                    joint->position(hands[i].fingers()[j].jointPosition(k) + _position * 0.04f);
+                    joint->translation(hands[i].fingers()[j].jointPosition(k) + _position * 0.04f);
                 }
                 
                 // set bone positions
                 for (SLint k = 0; k < 4; ++k) {                    
                     SLFingerBone fb = (SLFingerBone)k;
                     SLNode* bone = (hands[i].isLeft()) ? leftBones[j][k] : rightBones[j][k];
-                    bone->position(hands[i].fingers()[j].boneCenter(fb) + _position* 0.04f);
+                    bone->translation(hands[i].fingers()[j].boneCenter(fb) + _position* 0.04f);
                     bone->rotation(hands[i].fingers()[j].boneRotation(fb) * _orientation, TS_World);
                 }
             }
@@ -211,7 +211,7 @@ protected:
 
         const SLLeapTool& tool = tools[0];
 
-        _toolNode->position(tool.toolTipPosition());
+        _toolNode->translation(tool.toolTipPosition());
         _toolNode->rotation(tool.toolRotation());
     }
 };
@@ -342,7 +342,7 @@ protected:
             SLJoint* jnt = (hands[i].isLeft()) ? _leftWrist : _rightWrist;
 
             jnt->rotation(rot, TS_World);
-            jnt->position((hands[i].palmPosition() + _position) * _modelScale, TS_World); // note the correction for the models scaling
+            jnt->translation((hands[i].palmPosition() + _position) * _modelScale, TS_World); // note the correction for the models scaling
             
             for (SLint j = 0; j < hands[i].fingers().size(); ++j)
             {                
@@ -405,7 +405,7 @@ protected:
         SL_LOG("pinch: %f\n", hand.pinchStrength());
         if (hand.pinchStrength() > grabThreshold) {
             // display visualization of grab position
-            pinchVisualization->position(grabPosition, TS_World);
+            pinchVisualization->translation(grabPosition, TS_World);
 
             if (!grabbing[index]) {
                 grabbing[index]= true;
