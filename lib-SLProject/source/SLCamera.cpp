@@ -196,7 +196,7 @@ SLbool SLCamera::camUpdate(SLfloat elapsedTimeMS)
       
         SL_LOG("cs: %3.1f, %3.1f, %3.1f\n", _curSpeed.x, _curSpeed.y, _curSpeed.z);
         SLfloat temp = _curSpeed.length();
-      
+
         _curSpeed = updateAndGetWM().mat3() * _curSpeed;
         _curSpeed.y = 0;
         _curSpeed.normalize();
@@ -575,7 +575,7 @@ void SLCamera::setView(SLSceneView* sv, const SLEye eye)
                     SLbool tracked = s->oculus()->isPositionTracked();
                     if (tracked) {
                         SLint d = 0;
-                    }
+                }
                 }
                 else rotation = sv->deviceRotation();
 

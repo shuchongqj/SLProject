@@ -94,7 +94,7 @@ void SLScene::onLoad(SLSceneView* sv, SLCmd cmd)
 
     SLCamera* cam1 = new SLCamera();
     cam1->eyeHeight(1.67f); // set vr eye height
-    cam1->translation(0, 0.0f, 0);    // eye height for 180cm high male
+    cam1->position(0, 0.0f, 0);    // eye height for 180cm high male
     cam1->lookAt(0, 0.0f, -1.0f);
     cam1->focalDist(22);
     cam1->setInitialState();
@@ -353,7 +353,7 @@ void CustomSceneView::postSceneLoad()
             childNode->translate(0, -0.5f, 0); // make sure local origin is in the middle of the visible mesh for 'node'
             node->addChild(childNode);
             SLScene::current->root3D()->addChild(node);
-            node->translation((float)i * colSpacing - 0.5f * (float)cols * colSpacing, 2.0f + rowSpacing * (float)j + 1.5f, -5.0f, TS_World);
+            node->position((float)i * colSpacing - 0.5f * (float)cols * colSpacing, 2.0f + rowSpacing * (float)j + 1.5f, -5.0f, TS_World);
 
             _movableBoxes.push_back(node);
         }
@@ -374,12 +374,12 @@ void CustomSceneView::grabCallback(SLVec3f& pos, SLQuat4f& rot, bool isLeft)
     
     SLfloat radius = 0.6f;
     for (auto cube : _movableBoxes) {
-        if (cube->translation().x - radius < pos.x &&
-            cube->translation().y - radius < pos.y &&
-            cube->translation().z - radius < pos.z &&
-            cube->translation().x + radius > pos.x &&
-            cube->translation().y + radius > pos.y &&
-            cube->translation().z + radius > pos.z)
+        if (cube->position().x - radius < pos.x &&
+            cube->position().y - radius < pos.y &&
+            cube->position().z - radius < pos.z &&
+            cube->position().x + radius > pos.x &&
+            cube->position().y + radius > pos.y &&
+            cube->position().z + radius > pos.z)
         {
             _currentGrabbedObject[index] = cube;
             return;

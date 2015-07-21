@@ -326,7 +326,7 @@ void SLSceneView::onInitialize()
       
         SL_LOG("Time for AABBs : %5.3f sec.\n", 
                 (SLfloat)(clock()-t)/(SLfloat)CLOCKS_PER_SEC);
-      
+
         _stats.clear();
         s->root3D()->statsRec(_stats);
     }
@@ -517,7 +517,7 @@ SLbool SLSceneView::draw3DGL(SLfloat elapsedTimeMS)
     _camera->setFrustumPlanes(); 
     _blendNodes.clear();
     _opaqueNodes.clear();     
-    s->_root3D->cullRec(this);   
+    s->_root3D->cullRec(this);
    
     _cullTimeMS = s->timeMilliSec() - startMS;
 
