@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{56585130-FFCB-376A-9B5C-9F115298914E}</ProjectGuid>
+    <RootNamespace>app-AR-Demo</RootNamespace>
+    <Keyword>Qt4VSv1.0</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <PlatformToolSet>v140</PlatformToolSet>
+    <OutputDirectory>..\_bin-Release-x64\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>Application</ConfigurationType>
+    <IntermediateDirectory>..\intermediate\app-AR-Demo\Release\x64\</IntermediateDirectory>
+    <PrimaryOutput>app-AR-Demo</PrimaryOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <PlatformToolSet>v120</PlatformToolSet>
+    <OutputDirectory>..\_bin-Debug-x64\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>Application</ConfigurationType>
+    <IntermediateDirectory>..\intermediate\app-AR-Demo\Debug\x64\</IntermediateDirectory>
+    <PrimaryOutput>app-AR-Demo</PrimaryOutput>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\_bin-Release-x64\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">app-AR-Demo</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</PostBuildEventUseInBuild>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)_bin-$(Configuration)-$(Platform)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)intermediate\$(ProjectName)\$(Configuration)\$(Platform)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
+    <PostBuildEventUseInBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;include;..\include;..\lib-SLExternal;..\lib-SLExternal\assimp\include;..\lib-SLExternal\assimp\code;..\lib-SLExternal\glew\include;..\lib-SLExternal\glfw3\include;..\lib-SLExternal\zlib;..\lib-SLExternal\randomc;..\lib-SLExternal\half\include;..\lib-SLExternal\nvwa;..\lib-SLExternal\jpeg-8;..\lib-SLExternal\oculus\LibOVR\Include;..\lib-SLExternal\opencv\include;..\lib-SLExternal\half\include;..\lib-SLExternal\png;..\lib-SLExternal\dirent;..\..\..\libraries\vc14\qt\5.6\msvc2015_64\mkspecs\win32-msvc2015;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:strictStrings -Zc:throwingNew %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>..\intermediate\app-AR-Demo\Release\x64\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>_CONSOLE;WIN32;WIN64;SL_STARTSCENE=C_sceneMeshLoad;SL_GUI_GLFW;GLEW_STATIC;GLEW_NO_GLU;_GLFW_NO_DLOAD_GDI32;_GLFW_NO_DLOAD_WINMM;SL_HAS_OPENCV;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>lib-SLProject.lib;lib-SLExternal.lib;lib-assimp.lib;lib-ovr.lib;OpenGL32.lib;winmm.lib;gdi32.lib;user32.lib;kernel32.lib;shell32.lib;setupapi.lib;ws2_32.lib;D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\lib\opencv_core300.lib;D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\lib\opencv_imgproc300.lib;D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\lib\opencv_video300.lib;D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\lib\opencv_videoio300.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;D:\Development\SLProject\_lib\Release\x64;..\_lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkIncremental>false</LinkIncremental>
+      <OutputFile>$(OutDir)\app-AR-Demo.exe</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_CONSOLE;WIN32;WIN64;SL_STARTSCENE=C_sceneMeshLoad;SL_GUI_GLFW;GLEW_STATIC;GLEW_NO_GLU;_GLFW_NO_DLOAD_GDI32;_GLFW_NO_DLOAD_WINMM;SL_HAS_OPENCV;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_core300.dll ..\_bin-Release-x64 
+if errorlevel 1 goto VCEnd
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_imgproc300.dll ..\_bin-Release-x64 
+if errorlevel 1 goto VCEnd
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_imgcodecs300.dll ..\_bin-Release-x64 
+if errorlevel 1 goto VCEnd
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_video300.dll ..\_bin-Release-x64 
+if errorlevel 1 goto VCEnd
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_videoio300.dll ..\_bin-Release-x64 
+if errorlevel 1 goto VCEnd
+</Command>
+      <Message>copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_core300.dll ..\_bin-Release-x64 
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_imgproc300.dll ..\_bin-Release-x64 
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_imgcodecs300.dll ..\_bin-Release-x64 
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_video300.dll ..\_bin-Release-x64 
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_videoio300.dll ..\_bin-Release-x64 
+</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;include;..\include;..\lib-SLExternal;..\lib-SLExternal\assimp\include;..\lib-SLExternal\assimp\code;..\lib-SLExternal\glew\include;..\lib-SLExternal\glfw3\include;..\lib-SLExternal\zlib;..\lib-SLExternal\randomc;..\lib-SLExternal\half\include;..\lib-SLExternal\nvwa;..\lib-SLExternal\jpeg-8;..\lib-SLExternal\oculus\LibOVR\Include;..\lib-SLExternal\png;..\lib-SLExternal\dirent;%(AdditionalIncludeDirectories);D:\Development\opencv\BUILD_old\install\include</AdditionalIncludeDirectories>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <AssemblerListingLocation>..\intermediate\app-AR-Demo\Debug\x64\</AssemblerListingLocation>
+      <BrowseInformation>true</BrowseInformation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CONSOLE;WIN32;WIN64;SL_STARTSCENE=C_sceneMeshLoad;_DEBUG;SL_GUI_GLFW;GLEW_STATIC;GLEW_NO_GLU;_GLFW_NO_DLOAD_GDI32;_GLFW_NO_DLOAD_WINMM;SL_HAS_OPENCV;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>
+      </RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level2</WarningLevel>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>true</MinimalRebuild>
+      <OpenMPSupport>false</OpenMPSupport>
+      <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>D:\Development\SLProject\_lib\Debug\x64\lib-SLProject.lib;D:\Development\SLProject\_lib\Debug\x64\lib-SLExternal.lib;D:\Development\SLProject\_lib\Debug\x64\lib-assimp.lib;D:\Development\SLProject\_lib\Debug\x64\lib-ovr.lib;OpenGL32.lib;winmm.lib;gdi32.lib;user32.lib;kernel32.lib;shell32.lib;setupapi.lib;ws2_32.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_core310d.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_imgproc310d.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_video310d.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_videoio310d.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_imgcodecs310d.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_aruco310d.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_features2d310d.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_xfeatures2d310d.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_calib3d310d.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_highgui310d.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_flann310d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;D:\Development\SLProject\_lib\Debug\x64;..\_lib\Debug\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <OutputFile>$(OutDir)\app-AR-Demo.exe</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Console</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_CONSOLE;WIN32;WIN64;SL_STARTSCENE=C_sceneMeshLoad;_DEBUG;SL_GUI_GLFW;GLEW_STATIC;GLEW_NO_GLU;_GLFW_NO_DLOAD_GDI32;_GLFW_NO_DLOAD_WINMM;SL_HAS_OPENCV;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_core300.dll ..\_bin-Debug-x64 
+if errorlevel 1 goto VCEnd
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_imgproc300.dll ..\_bin-Debug-x64 
+if errorlevel 1 goto VCEnd
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_imgcodecs300.dll ..\_bin-Debug-x64 
+if errorlevel 1 goto VCEnd
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_video300.dll ..\_bin-Debug-x64 
+if errorlevel 1 goto VCEnd
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_videoio300.dll ..\_bin-Debug-x64 
+if errorlevel 1 goto VCEnd
+</Command>
+      <Message>copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_core300.dll ..\_bin-Debug-x64 
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_imgproc300.dll ..\_bin-Debug-x64 
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_imgcodecs300.dll ..\_bin-Debug-x64 
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_video300.dll ..\_bin-Debug-x64 
+ copy /y D:\Development\SLProject\_lib\prebuilt\OpenCV\x64\vc12\bin\opencv_videoio300.dll ..\_bin-Debug-x64 
+</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AR2DMapper.cpp" />
+    <ClCompile Include="AR2DTracker.cpp" />
+    <ClCompile Include="ARArucoTracker.cpp" />
+    <ClCompile Include="ARCalibration.cpp" />
+    <ClCompile Include="ARChessboardTracker.cpp" />
+    <ClCompile Include="ARSceneView.cpp" />
+    <ClCompile Include="ARTracker.cpp" />
+    <ClCompile Include="glfwMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AR2DMapper.h" />
+    <ClInclude Include="AR2DTracker.h" />
+    <ClInclude Include="ARArucoTracker.h" />
+    <ClInclude Include="ARCalibration.h" />
+    <ClInclude Include="ARChessboardTracker.h" />
+    <ClInclude Include="ARSceneView.h" />
+    <ClInclude Include="ARTracker.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" Qt5Version_x0020_x64="Qt5.6" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

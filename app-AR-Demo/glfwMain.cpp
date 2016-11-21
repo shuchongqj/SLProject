@@ -8,6 +8,9 @@
 //             Please visit: http://opensource.org/licenses/GPL-3.0
 //#############################################################################
 
+//#define NOMINMAX
+//#include <Windows.h>
+
 #include <stdafx.h>
 #ifdef SL_MEMLEAKDETECT       // set in SL.h for debug config only
 #include <debug_new.h>        // memory leak detector
@@ -68,7 +71,7 @@ SLbool onPaint()
 {
     // If live video image is requested grab it and copy it
     if (slUsesVideoImage())
-        slGrabCopyVideoImage(svIndex, 1);
+        slGrabCopyVideoImage(svIndex, 0);
 
     bool viewNeedsRepaint = slUpdateAndPaint(svIndex);
 

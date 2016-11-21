@@ -555,6 +555,8 @@ SLbool ARSceneView::onKeyPress(const SLKey key, const SLKey mod)
     }
 
     processModeChange();
+
+    return true;
 }
 //-----------------------------------------------------------------------------
 void ARSceneView::clearInfoLine()

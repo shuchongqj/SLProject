@@ -22,6 +22,7 @@
 #include <SLDrawBits.h>
 #include <SLGLOculusFB.h>
 #include <SLGLVertexArrayExt.h>
+#include <memory>
 
 //-----------------------------------------------------------------------------
 class SLCamera;

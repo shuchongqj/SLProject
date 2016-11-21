@@ -16,7 +16,7 @@
 #define STDAFX_H
 
 #define _USE_MATH_DEFINES
-//#define NOMINMAX
+#define NOMINMAX
 
 //-----------------------------------------------------------------------------
 // Core header files used by all files

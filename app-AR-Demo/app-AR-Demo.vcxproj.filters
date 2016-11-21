@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Dateien">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source Dateien">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AR2DMapper.cpp">
+      <Filter>Source Dateien</Filter>
+    </ClCompile>
+    <ClCompile Include="AR2DTracker.cpp">
+      <Filter>Source Dateien</Filter>
+    </ClCompile>
+    <ClCompile Include="ARArucoTracker.cpp">
+      <Filter>Source Dateien</Filter>
+    </ClCompile>
+    <ClCompile Include="ARCalibration.cpp">
+      <Filter>Source Dateien</Filter>
+    </ClCompile>
+    <ClCompile Include="ARChessboardTracker.cpp">
+      <Filter>Source Dateien</Filter>
+    </ClCompile>
+    <ClCompile Include="ARSceneView.cpp">
+      <Filter>Source Dateien</Filter>
+    </ClCompile>
+    <ClCompile Include="ARTracker.cpp">
+      <Filter>Source Dateien</Filter>
+    </ClCompile>
+    <ClCompile Include="glfwMain.cpp">
+      <Filter>Source Dateien</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AR2DMapper.h">
+      <Filter>Header Dateien</Filter>
+    </ClInclude>
+    <ClInclude Include="AR2DTracker.h">
+      <Filter>Header Dateien</Filter>
+    </ClInclude>
+    <ClInclude Include="ARArucoTracker.h">
+      <Filter>Header Dateien</Filter>
+    </ClInclude>
+    <ClInclude Include="ARCalibration.h">
+      <Filter>Header Dateien</Filter>
+    </ClInclude>
+    <ClInclude Include="ARChessboardTracker.h">
+      <Filter>Header Dateien</Filter>
+    </ClInclude>
+    <ClInclude Include="ARSceneView.h">
+      <Filter>Header Dateien</Filter>
+    </ClInclude>
+    <ClInclude Include="ARTracker.h">
+      <Filter>Header Dateien</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

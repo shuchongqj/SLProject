@@ -94,7 +94,8 @@ bool AR2DTracker::init(string paramsFileDir)
         //initialize matcher
         _matcher = DescriptorMatcher::create("BruteForce-Hamming");
     }
-
+    
+    return true;
 }
 //-----------------------------------------------------------------------------
 bool AR2DTracker::track()
@@ -293,6 +294,8 @@ bool AR2DTracker::track()
             //update the tracking status visualization in Scene View
         }
     }
+
+    return true;
 }
 //-----------------------------------------------------------------------------
 void AR2DTracker::updateSceneView( ARSceneView* sv )

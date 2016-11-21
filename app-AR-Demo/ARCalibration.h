@@ -12,6 +12,7 @@
 #define ARCALIBRATION_H
 
 #include <opencv2/core.hpp>
+#include <time.h>
 
 class ARCalibration
 {

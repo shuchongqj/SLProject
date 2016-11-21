@@ -20,6 +20,8 @@
 #include <SLSceneView.h>
 #include <SLEnums.h>
 
+#include <opencv2/opencv.hpp>
+
 //-----------------------------------------------------------------------------
 // GLobal application variables
 GLFWwindow* window;                 //!< The global glfw window handle

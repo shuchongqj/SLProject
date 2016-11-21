@@ -136,9 +136,9 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(ProjectDir);..\include;..\lib-SLExternal;..\lib-SLExternal\jpeg-8;..\lib-SLExternal\png;..\lib-SLExternal\zlib;..\lib-SLExternal\glew\include;..\lib-SLExternal\glfw3\include;..\lib-SLExternal\randomc;..\lib-SLExternal\Shoemake;..\lib-SLExternal\oculus\LibOVR\Include\;..\lib-SLExternal\nvwa;..\lib-SLExternal\assimp\include;..\lib-SLExternal\assimp\code;..\lib-SLExternal\dirent;..\lib-SLExternal\opencv\include;..\lib-SLExternal\half\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);..\include;..\lib-SLExternal;..\lib-SLExternal\jpeg-8;..\lib-SLExternal\png;..\lib-SLExternal\zlib;..\lib-SLExternal\glew\include;..\lib-SLExternal\glfw3\include;..\lib-SLExternal\randomc;..\lib-SLExternal\Shoemake;..\lib-SLExternal\oculus\LibOVR\Include\;..\lib-SLExternal\nvwa;..\lib-SLExternal\assimp\include;..\lib-SLExternal\assimp\code;..\lib-SLExternal\dirent;..\lib-SLExternal\half\include;D:\Development\opencv\BUILD_old\install\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SL_STARTSCENE#C_sceneMeshLoad;HAS_OPENCV;SL_GUI_GLFW;GLEW_STATIC;_DEBUG;UNICODE;_WINDOWS</PreprocessorDefinitions>
-      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <OpenMPSupport>false</OpenMPSupport>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
@@ -153,7 +153,7 @@
       <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;opengl32.lib;lib-ovr.lib;lib-SLExternal.lib;lib-SLProject.lib;lib-Assimp.lib;opencv_core300.lib;opencv_imgproc300.lib;opencv_video300.lib;opencv_videoio300.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;opengl32.lib;lib-ovr.lib;lib-SLExternal.lib;lib-SLProject.lib;lib-Assimp.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_core310d.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_imgproc310d.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_video310d.lib;D:\Development\opencv\BUILD_old\install\x64\vc12\lib\opencv_videoio310d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(SolutionDir)_lib\$(Configuration)\$(Platform)\;$(SolutionDir)_lib\prebuilt\OpenCV\x64\vc12\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
